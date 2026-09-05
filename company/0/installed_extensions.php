@@ -14,4 +14,12 @@ $installed_extensions = array (
 		'active' => true,
 		'urank' => 1,
 	),
+	2 => array(
+		'name' => 'KNB Group Banking',
+		'package' => 'knb_banking',
+		'version' => '1.0',
+		'path' => 'modules/knb_banking',
+		'active' => true,
+		'urank' => 2,
+	),
 );
