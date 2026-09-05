@@ -6,8 +6,9 @@ function add_employee($emp_code, $first_name, $last_name, $gender, $department_i
 	$sql = "INSERT INTO ".TB_PREF."hr_employees
 		(emp_code, first_name, last_name, gender, department_id, designation_id, mobile, email, dob, hire_date)
 		VALUES (".db_escape($emp_code).",".db_escape($first_name).",".db_escape($last_name).","
-		.db_escape($gender).",".db_escape($department_id).",".db_escape($designation_id).","
-		.db_escape($mobile).",".db_escape($email).",".db_escape($dob).",".db_escape($hire_date).")";
+		.db_escape($gender ?: null, true).",".db_escape($department_id ?: null, true).","
+		.db_escape($designation_id ?: null, true).",".db_escape($mobile).",".db_escape($email).","
+		.db_escape($dob ?: null, true).",".db_escape($hire_date ?: null, true).")";
 	db_query($sql, "could not add employee");
 }
 
@@ -16,10 +17,10 @@ function update_employee($id, $emp_code, $first_name, $last_name, $gender, $depa
 {
 	$sql = "UPDATE ".TB_PREF."hr_employees SET
 		emp_code=".db_escape($emp_code).", first_name=".db_escape($first_name).",
-		last_name=".db_escape($last_name).", gender=".db_escape($gender).",
-		department_id=".db_escape($department_id).", designation_id=".db_escape($designation_id).",
+		last_name=".db_escape($last_name).", gender=".db_escape($gender ?: null, true).",
+		department_id=".db_escape($department_id ?: null, true).", designation_id=".db_escape($designation_id ?: null, true).",
 		mobile=".db_escape($mobile).", email=".db_escape($email).",
-		dob=".db_escape($dob).", hire_date=".db_escape($hire_date)."
+		dob=".db_escape($dob ?: null, true).", hire_date=".db_escape($hire_date ?: null, true)."
 		WHERE id=".db_escape($id);
 	db_query($sql, "could not update employee");
 }

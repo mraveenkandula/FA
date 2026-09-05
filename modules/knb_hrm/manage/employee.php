@@ -45,7 +45,9 @@ if ($Mode=='ADD_ITEM' && can_process())
 {
 	add_employee($_POST['emp_code'], $_POST['first_name'], $_POST['last_name'],
 		$_POST['gender'], $_POST['department_id'], $_POST['designation_id'],
-		$_POST['mobile'], $_POST['email'], $_POST['dob'], $_POST['hire_date']);
+		$_POST['mobile'], $_POST['email'],
+		$_POST['dob'] ? date2sql($_POST['dob']) : null,
+		$_POST['hire_date'] ? date2sql($_POST['hire_date']) : null);
 	display_notification(_('New employee has been added'));
 	$Mode = 'RESET';
 }
@@ -54,7 +56,9 @@ if ($Mode=='UPDATE_ITEM' && can_process())
 {
 	update_employee($selected_id, $_POST['emp_code'], $_POST['first_name'], $_POST['last_name'],
 		$_POST['gender'], $_POST['department_id'], $_POST['designation_id'],
-		$_POST['mobile'], $_POST['email'], $_POST['dob'], $_POST['hire_date']);
+		$_POST['mobile'], $_POST['email'],
+		$_POST['dob'] ? date2sql($_POST['dob']) : null,
+		$_POST['hire_date'] ? date2sql($_POST['hire_date']) : null);
 	display_notification(_('Selected employee has been updated'));
 	$Mode = 'RESET';
 }
@@ -113,8 +117,8 @@ if ($selected_id != -1 && $Mode == 'Edit')
 	$_POST['designation_id'] = $myrow["designation_id"];
 	$_POST['mobile'] = $myrow["mobile"];
 	$_POST['email'] = $myrow["email"];
-	$_POST['dob'] = $myrow["dob"];
-	$_POST['hire_date'] = $myrow["hire_date"];
+	$_POST['dob'] = $myrow["dob"] ? sql2date($myrow["dob"]) : null;
+	$_POST['hire_date'] = $myrow["hire_date"] ? sql2date($myrow["hire_date"]) : null;
 }
 if ($selected_id != -1)
 	hidden('selected_id', $selected_id);
