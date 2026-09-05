@@ -20,6 +20,8 @@ if (isset($_POST['SaveAttendance']))
 	$sql_date = date2sql($_POST['att_date']);
 	foreach ($_POST['status'] as $employee_id => $status)
 	{
+		if (!in_array($status, $statuses, true))
+			continue;
 		save_attendance(
 			$sql_date,
 			$employee_id,
@@ -29,7 +31,7 @@ if (isset($_POST['SaveAttendance']))
 			@$_POST['remarks'][$employee_id]
 		);
 	}
-	display_notification(_('Attendance saved for').' '.$_POST['att_date']);
+	display_notification(_('Attendance saved for').' '.htmlspecialchars($_POST['att_date'], ENT_QUOTES, 'UTF-8'));
 }
 
 start_form();
@@ -64,9 +66,9 @@ while ($row = db_fetch($result))
 	$sel .= "</select>";
 	label_cell($sel);
 
-	label_cell("<input type='text' size=8 name='check_in[$id]' value='".htmlspecialchars(@$cur['check_in'])."' placeholder='HH:MM'>");
-	label_cell("<input type='text' size=8 name='check_out[$id]' value='".htmlspecialchars(@$cur['check_out'])."' placeholder='HH:MM'>");
-	label_cell("<input type='text' size=15 name='remarks[$id]' value='".htmlspecialchars(@$cur['remarks'])."'>");
+	label_cell("<input type='text' size=8 name='check_in[$id]' value=\"".htmlspecialchars(@$cur['check_in'], ENT_QUOTES, 'UTF-8')."\" placeholder='HH:MM'>");
+	label_cell("<input type='text' size=8 name='check_out[$id]' value=\"".htmlspecialchars(@$cur['check_out'], ENT_QUOTES, 'UTF-8')."\" placeholder='HH:MM'>");
+	label_cell("<input type='text' size=15 name='remarks[$id]' value=\"".htmlspecialchars(@$cur['remarks'], ENT_QUOTES, 'UTF-8')."\">");
 	end_row();
 }
 end_table();

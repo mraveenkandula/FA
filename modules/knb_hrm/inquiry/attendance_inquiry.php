@@ -33,12 +33,12 @@ while ($row = db_fetch($result))
 {
 	alt_table_row_color($k);
 	label_cell(sql2date($row['att_date']));
-	label_cell($row['emp_code']);
-	label_cell(trim($row['first_name'].' '.$row['last_name']));
-	label_cell($row['status']);
-	label_cell($row['check_in']);
-	label_cell($row['check_out']);
-	label_cell($row['remarks']);
+	label_cell(htmlspecialchars($row['emp_code'], ENT_QUOTES, 'UTF-8'));
+	label_cell(htmlspecialchars(trim($row['first_name'].' '.$row['last_name']), ENT_QUOTES, 'UTF-8'));
+	label_cell(htmlspecialchars($row['status'], ENT_QUOTES, 'UTF-8'));
+	label_cell(htmlspecialchars($row['check_in'], ENT_QUOTES, 'UTF-8'));
+	label_cell(htmlspecialchars($row['check_out'], ENT_QUOTES, 'UTF-8'));
+	label_cell(htmlspecialchars($row['remarks'], ENT_QUOTES, 'UTF-8'));
 	end_row();
 }
 end_table();

@@ -30,13 +30,13 @@ $k = 0;
 while ($row = db_fetch($result))
 {
 	alt_table_row_color($k);
-	label_cell($row['recorded_at']);
-	label_cell($row['emp_code']);
-	label_cell(trim($row['first_name'].' '.$row['last_name']));
-	label_cell($row['latitude'].', '.$row['longitude']);
-	label_cell($row['accuracy_m'] ? $row['accuracy_m'].'m' : '');
-	label_cell($row['remarks']);
-	$map_url = "https://www.google.com/maps?q=".$row['latitude'].",".$row['longitude'];
+	label_cell(htmlspecialchars($row['recorded_at'], ENT_QUOTES, 'UTF-8'));
+	label_cell(htmlspecialchars($row['emp_code'], ENT_QUOTES, 'UTF-8'));
+	label_cell(htmlspecialchars(trim($row['first_name'].' '.$row['last_name']), ENT_QUOTES, 'UTF-8'));
+	label_cell(htmlspecialchars($row['latitude'].', '.$row['longitude'], ENT_QUOTES, 'UTF-8'));
+	label_cell($row['accuracy_m'] ? (int)$row['accuracy_m'].'m' : '');
+	label_cell(htmlspecialchars($row['remarks'], ENT_QUOTES, 'UTF-8'));
+	$map_url = "https://www.google.com/maps?q=".rawurlencode($row['latitude'].",".$row['longitude']);
 	label_cell("<a href='".htmlspecialchars($map_url)."' target='_blank'>"._("View on map")."</a>");
 	end_row();
 }
