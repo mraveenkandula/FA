@@ -1,5 +1,5 @@
 <?php
-$page_security = 'SA_OPEN';
+$page_security = 'SA_RECONCILE';
 $path_to_root = "../../..";
 include_once($path_to_root . "/includes/session.inc");
 
@@ -93,7 +93,7 @@ function parse_statement_date($raw)
 	return null;
 }
 
-if (isset($_POST['DoImport']) && isset($_FILES['statement_file']) && $_FILES['statement_file']['error'] == UPLOAD_ERR_OK)
+if (isset($_POST['DoImport']) && isset($_FILES['statement_file']) && $_FILES['statement_file']['error'] == UPLOAD_ERR_OK && check_csrf_token())
 {
 	list($rows, $err) = parse_statement_csv($_FILES['statement_file']['tmp_name']);
 	if ($err)
