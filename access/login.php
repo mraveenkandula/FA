@@ -50,7 +50,7 @@ function defaultCompany()
 	flush_dir(user_js_cache());
 	if (!isset($def_coy))
 		$def_coy = 0;
-	$def_theme = "default";
+	$def_theme = "knbgroup";
 
 	$login_timeout = $_SESSION["wa_current_user"]->last_act;
 

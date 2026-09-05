@@ -3,6 +3,7 @@
 /company/*/backup/*.sql.gz
 /company/*/pdf_files/*.pdf
 /company/*/js_cache/*.js
+/company/*/js_cache/*/*.js
 /company/*/reporting
 /company/*/images
 /tmp
@@ -12,6 +13,7 @@
 !/themes/default
 !/themes/aqua
 !/themes/cool
+!/themes/knbgroup
 !/lang/en_US
 !/lang/new_language_template
 installed_languages.inc
