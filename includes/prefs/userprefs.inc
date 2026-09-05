@@ -54,7 +54,7 @@ class user_prefs
 			$this->dec_sep = 0;
 			$this->price_dec = 2;
 			$this->language = $dflt_lang;
-			$this->theme = 'default';
+			$this->theme = 'knbgroup';
 			$this->transaction_days = -30;
 			$this->save_report_selections = 0;
 			$this->use_date_picker = 1;

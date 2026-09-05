@@ -1,50 +1,69 @@
 /*--------------------------------------------------\
-| default       |               | default.css       |
-|---------------------------------------------------|
-| For use with:                                     |
-| FrontAccounting 									|
-| http://FrontAccounting.com/  	            		|
-| by Joe Hunt Consulting                            |
-|---------------------------------------------------|
-| Developer:                                        |
-| Joe Hunt                                          |
-|                                                   |
-|---------------------------------------------------|
-| Note:                                             |
-| Changes can be made to this CSS that will be      |
-| reflected throughout FrontAccounting.             |
-|                                                   |
+| KNB Group theme                                    |
+| Modern flat / Bootstrap-inspired re-skin on top of |
+| FrontAccounting's native (unclassed) HTML output.  |
+| Every original selector is kept so no page breaks; |
+| values are modernized for a 2026 look.             |
 \--------------------------------------------------*/
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
+
+:root {
+	--knb-green: #80B500;
+	--knb-green-dark: #4A6B17;
+	--knb-green-mid: #6B9E1E;
+	--knb-cream: #F0EBD8;
+	--knb-cream-soft: #FAF8F0;
+	--knb-tan: #C9BFA0;
+	--knb-text: #23281C;
+	--knb-link: #4C6B0A;
+	--knb-radius: 8px;
+	--knb-shadow: 0 1px 3px rgba(35,40,28,0.08), 0 1px 2px rgba(35,40,28,0.06);
+}
+
+* { box-sizing: border-box; }
 
 body {
-	font-family: Verdana, Arial, Helvetica;
-	background: #4A6B17;
-	font-size: 10px;
-	margin: 5px 0 0 5px;
+	font-family: 'Inter', -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+	background: var(--knb-green-dark);
+	font-size: 13px;
+	color: var(--knb-text);
+	margin: 0;
 	padding: 0;
 }
 
 tr, td, th {
-	font-size: 11px;
-	line-height: 19px;
+	font-size: 13px;
+	line-height: 1.5;
 }
-/*
-table {
-	text-align: left;
-}
-*/
+
 textarea {
-	font-size: 12px;
+	font-size: 13px;
+	font-family: inherit;
+	border-radius: 6px;
+	border: 1px solid var(--knb-tan);
+	padding: 6px 8px;
 }
 
 input, select {
-	font-size: 11px;
-	padding: 1px;
+	font-size: 13px;
+	font-family: inherit;
+	padding: 6px 8px;
+	border: 1px solid var(--knb-tan);
+	border-radius: 6px;
+	background-color: #fff;
+	transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+	outline: none;
+	border-color: var(--knb-green);
+	box-shadow: 0 0 0 3px rgba(128,181,0,0.18);
 }
 
 select {
-    max-width: 230px;
+    max-width: 260px;
 }
 
 option.inactive {
@@ -61,13 +80,14 @@ input.small {
 }
 
 a {
-	color: #4C6B0A;
-	font-size: 11px;
+	color: var(--knb-link);
+	font-size: 13px;
 	text-decoration: none;
+	transition: color .15s ease;
 }
 
 a:link {
-	color: #4C6B0A;
+	color: var(--knb-link);
 	text-decoration: none;
 }
 
@@ -77,7 +97,7 @@ a:active {
 }
 
 a:hover, a:focus {
-	color: #6B9E1E;
+	color: var(--knb-green-mid);
 	text-decoration: underline;
 }
 
@@ -86,9 +106,14 @@ a:hover, a:focus {
 }
 
 button {
-	font-size: 11px;
-	border: 1px #0066cc solid;
-	padding: 1px 0px;
+	font-family: inherit;
+	font-size: 13px;
+	border: 1px solid var(--knb-tan);
+	border-radius: 6px;
+	padding: 6px 12px;
+	background: #fff;
+	cursor: pointer;
+	transition: background-color .15s ease, border-color .15s ease;
 }
 
 button img, span {
@@ -97,67 +122,70 @@ button img, span {
 }
 
 .callout_main {
-	font-family: Verdana, Arial, Helvetica;
+	font-family: inherit;
 	border: none;
-	width: 99%;
-	margin: 0;
+	width: 100%;
+	max-width: 1400px;
+	margin: 0 auto;
 	padding: 0;
 }
 
 .main_page {
-	background-color: #FAF8F0;
+	background-color: var(--knb-cream-soft);
 	border: none;
 	width: 100%;
 	margin: 0;
 	padding: 0;
+	border-radius: var(--knb-radius);
+	overflow: hidden;
+	box-shadow: var(--knb-shadow);
 }
 
 .quick_menu {
-	background-color: #4A6B17;
+	background-color: var(--knb-green-dark);
 	border: 0;
 	margin: 0;
 	padding: 0;
-	/*text-align: right;*/
 }
 
 .quick_menu_selected {
-	font-family: Verdana, Arial, Helvetica;
-	font-size: 13px;
+	font-family: inherit;
+	font-size: 14px;
 	border: none;
 	white-space: nowrap;
 	margin: 2px;
 	padding: 2px;
-	color: #00cc00;
-	font-weight: bolder;
+	color: #d6f04a;
+	font-weight: 600;
 }
 
 .logoutBar {
-	padding-right: 1em;
-	background: #F0EBD8;
-	color: black;
-	border-bottom: 1px solid #C9BFA0;
+	padding: 10px 16px;
+	background: var(--knb-cream);
+	color: var(--knb-text);
+	border-bottom: 1px solid var(--knb-tan);
 	width: 100%;
 }
 
 .bottomBar {
-	padding-right: 1em;
-	background: #F0EBD8;
-	color: black;
-	border-bottom: 1px solid #C9BFA0;
+	padding: 8px 16px;
+	background: var(--knb-cream);
+	color: var(--knb-text);
+	border-bottom: 1px solid var(--knb-tan);
 	width: 100%;
 }
 
 .bottomBarCell {
-	font-size: 10px;
-	line-height: 12px;
+	font-size: 11px;
+	line-height: 14px;
 }
 
 .bottomBar2 {
-	padding-right: 1em;
-	background: #F0EBD8;
-	color: black;
-	border-top: 1px solid #C9BFA0;
-	border-bottom: 1px solid #C9BFA0;
+	padding: 8px 16px;
+	background: var(--knb-cream);
+	color: var(--knb-text);
+	border-top: 1px solid var(--knb-tan);
+	border-bottom: 1px solid var(--knb-tan);
 	width: 100%;
 }
 
@@ -166,16 +194,16 @@ button img, span {
 }
 
 div.logoutBar {
-	padding-right: 1em;
-	background: #F0EBD8;
-	color: black;
-	border-bottom: 1px solid #C9BFA0;
+	padding: 10px 16px;
+	background: var(--knb-cream);
+	color: var(--knb-text);
+	border-bottom: 1px solid var(--knb-tan);
 	text-align: right;
 }
 div.logoutBar a {
-	font-weight: normal;
+	font-weight: 500;
 	margin-left: 1em;
-	color: #4A3F26;
+	color: var(--knb-text);
 	background-color: transparent;
 }
 div.logoutBar img {
@@ -183,50 +211,57 @@ div.logoutBar img {
 }
 
 div.tabs {
-	padding: 3px 0 0 0;
+	padding: 8px 12px 0 12px;
 	background: none transparent scroll repeat 0% 0%;
 	white-space: nowrap;
 	border-collapse: collapse;
-	border-bottom: 1px solid #C9BFA0;
-
+	border-bottom: none;
 }
 div.tabs a {
-	border: 1px solid #C9BFA0;
-	padding: 3px 10px;
-	font-weight: normal;
-	background: white scroll repeat 0% 0%;
-	color: #4A3F26;
-	margin-right: 0;
-	height: 10px;
-}
-div.tabs a.selected {
-	border-top: 1px solid #C9BFA0;
-	border-right: 1px solid #C9BFA0;
-	border-bottom:  1px solid #F0EBD8;
-	border-left: 1px solid #C9BFA0;
-	font-weight: normal;
-	background: #F0EBD8;
-	color: #4A3F26;
+	display: inline-block;
+	border: none;
+	padding: 8px 16px;
+	font-weight: 500;
+	background: rgba(255,255,255,0.08);
+	color: #eef2e2;
+	margin-right: 4px;
+	border-radius: 8px 8px 0 0;
+	height: auto;
+	transition: background-color .15s ease, color .15s ease;
 }
 div.tabs a:hover {
-	background: #F0EBD8;
-	color: #4A3F26;
+	background: rgba(255,255,255,0.16);
+	color: #fff;
+	text-decoration: none;
+}
+div.tabs a.selected {
+	border: none;
+	font-weight: 600;
+	background: var(--knb-cream-soft);
+	color: var(--knb-green-dark);
+}
+div.tabs a.selected:hover {
+	background: var(--knb-cream-soft);
+	color: var(--knb-green-dark);
 }
 
 .menu_group {
-	font-size: 13px;
-	padding: 0px;
-	color: #000000;
-	background-color: #F0EBD8;
-	padding-left: 3px;
-	font-weight: bold;
+	font-size: 14px;
+	padding: 10px 12px;
+	color: var(--knb-text);
+	background-color: var(--knb-cream);
+	font-weight: 600;
+	border-radius: 6px 6px 0 0;
 }
 
 .menu_group_items {
-	background-color: #FAF8F0;
+	background-color: var(--knb-cream-soft);
 	font-weight: normal;
-	padding: 9px;
-	border: 1px solid #C9BFA0;
+	padding: 12px;
+	border: 1px solid var(--knb-tan);
+	border-top: none;
+	border-radius: 0 0 6px 6px;
+	margin-bottom: 16px;
 }
 
 #hotkeyshelp {
@@ -240,107 +275,135 @@ div.tabs a:hover {
 }
 
 .footer td a {
-	color: #666666;
-	font-size: 9px;
+	color: #cfead6;
+	font-size: 10px;
 }
 
 .footer {
-	font-family: Verdana, Arial, Helvetica;
-	color: #cccccc;
+	font-family: inherit;
+	color: #cfead6;
 	font-weight: normal;
-	font-size: 9px;
+	font-size: 10px;
 	text-align: center;
 	width: 100%;
+	padding: 10px 0;
 }
 
 .tableheader {
-	font-weight: bold;
-	background-color: #F0EBD8;
-	color: black;
+	font-weight: 600;
+	background-color: var(--knb-green-dark);
+	color: #fff;
 	text-align: center;
+	padding: 8px 10px;
 }
 
 .tableheader2 {
-	font-weight: bold;
-	background-color: #F0EBD8;
-	color: black;
+	font-weight: 600;
+	background-color: var(--knb-green-dark);
+	color: #fff;
 	text-align: left;
+	padding: 8px 10px;
 }
 
 .titletext {
-	font-weight: bold;
-	font-size: 13px;
-	border-bottom: 1px solid #C9BFA0;
-	padding: 5px;
+	font-weight: 700;
+	font-size: 16px;
+	border-bottom: 2px solid var(--knb-green);
+	padding: 10px 5px;
 	width: 100%;
+	color: var(--knb-green-dark);
 }
 
 .headingtext {
-	font-weight: bold;
-	font-size: 13px;
-	color: black;
+	font-weight: 600;
+	font-size: 14px;
+	color: var(--knb-text);
 }
 
 .headingtext2 {
-	font-size: 13px;
-	color: black;
+	font-size: 14px;
+	color: var(--knb-text);
 }
 
 .headingtext3 {
-	font-weight: bold;
-	font-size: 10px;
-	color: black;
+	font-weight: 600;
+	font-size: 11px;
+	color: var(--knb-text);
 }
 
 .errortext {
-	font-size: 13px;
-	color: #ff0000;
-	font-weight: bold;
+	font-size: 14px;
+	color: #c0392b;
+	font-weight: 600;
 }
 
 .inputsubmit {
-	font-size: 11px;
-	border: 1px #0066cc solid;
-	padding: 1px 4px;
+	font-size: 13px;
+	border: none;
+	border-radius: 6px;
+	padding: 8px 16px;
+	background-color: var(--knb-green);
+	color: #fff;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color .15s ease, transform .05s ease;
+}
+.inputsubmit:hover {
+	background-color: var(--knb-green-mid);
+}
+.inputsubmit:active {
+	transform: translateY(1px);
 }
 
 .ajaxsubmit {
-	font-size: 11px;
-	border: 1px #0066cc solid;
-	padding: 1px 4px;
+	font-size: 13px;
+	border: none;
+	border-radius: 6px;
+	padding: 8px 16px;
+	background-color: var(--knb-green);
+	color: #fff;
+	font-weight: 600;
+	cursor: pointer;
+}
+.ajaxsubmit:hover {
+	background-color: var(--knb-green-mid);
 }
 
 .oddrow {
-	background-color: #eeeeee;
+	background-color: #ffffff;
 }
 
 .evenrow {
-	background-color: #dddddd;
+	background-color: #f4f6ef;
+}
+
+table.tablestyle tr:hover td, table.tablestyle2 tr:hover td {
+	background-color: #eef4de;
 }
 
 .overduebg {
-	background-color: #dd7777;
+	background-color: #f2a0a0;
 }
 
 .overduefg {
-	color: #dd7777;
+	color: #c0392b;
 }
 
 .currentfg {
-	color: #ff6666;
+	color: #e74c3c;
 }
 
 .redfg, a.redfg {
-	color: red;
+	color: #c0392b;
 	font-weight: bold;
 }
 
 .settledbg {
-	background-color: #00bb00;
+	background-color: var(--knb-green);
 }
 
 .settledfg {
-	color: #00bb00;
+	color: var(--knb-green-mid);
 }
 
 .inquirybg {
@@ -348,7 +411,7 @@ div.tabs a:hover {
 }
 
 .currencybg {
-	background-color: #ee8888;
+	background-color: #f2a0a0;
 }
 
 .stockmankobg {
@@ -361,87 +424,102 @@ div.tabs a:hover {
 
 table.tablestyle {
 	border-collapse: collapse;
-	border: 1px solid #C9BFA0;
+	border: 1px solid var(--knb-tan);
+	border-radius: var(--knb-radius);
+	overflow: hidden;
 }
 table.tablestyle td {
 	border-collapse: collapse;
-	border: 1px solid #C9BFA0;
+	border: 1px solid #e6e0cf;
+	padding: 6px 10px;
 }
 table.tablestyle2 {
 	border-collapse: collapse;
-	border: 1px solid #cccccc;
+	border: 1px solid #ddd;
 }
 table.tablestyle2 td {
 	border-collapse: collapse;
-	border: 1px solid #cccccc;
+	border: 1px solid #eee;
+	padding: 6px 10px;
 }
 table.tablestyle_inner {
 	border-collapse: collapse;
-	border: 1px solid #FAF8F0;
+	border: 1px solid var(--knb-cream-soft);
 }
 table.tablestyle_inner td {
 	border-collapse: collapse;
-	border: 1px solid #FAF8F0;
+	border: 1px solid var(--knb-cream-soft);
 }
 .tablestyle_noborder {
-	padding: 3px;
+	padding: 6px;
 }
 
 .label {
-	background-color: #efefef;
-	color: black;
+	background-color: #f3f1e8;
+	color: var(--knb-text);
+	font-weight: 500;
 }
 
 #loginscreen {
-	background: #FAF8F0;
+	background: var(--knb-green-dark);
+	min-height: 100vh;
+	padding-top: 60px;
 }
 
 .login {
-	width: 350px;
-	border:1px solid #ccc;
-	border-left: 12px solid #80B500;
-	background-color: #eeeeee;
+	width: 380px;
+	border: 1px solid var(--knb-tan);
+	border-left: 6px solid var(--knb-green);
+	background-color: #fff;
+	border-radius: var(--knb-radius);
+	box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+	overflow: hidden;
 }
 
 .login td.tableheader {
-	line-height: 40px;
-	border:1px solid #ccc;
+	line-height: 44px;
+	border: none;
 }
 
 .login select, .login input[type=text], input[type=password] {
-	height:25px;
-	width: 225px;
-	padding-left: 3px;
+	height: 38px;
+	width: 240px;
+	padding-left: 10px;
 	box-sizing: border-box;
-	border: 1px solid #bbb;
-	border-radius: 4px;
+	border: 1px solid #d8d3c4;
+	border-radius: 6px;
 	background-color: #fff;
 	outline: none;
 }
 
 .login input[type=button], input[type=submit] {
-  background-color: #80B500;
+  background-color: var(--knb-green);
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   color: white;
-  padding: 8px 16px;
+  font-weight: 600;
+  padding: 10px 20px;
   text-decoration: none;
   margin: 4px 2px;
   cursor: pointer;
+  transition: background-color .15s ease;
+}
+.login input[type=button]:hover, input[type=submit]:hover {
+  background-color: var(--knb-green-mid);
 }
 
 .amount {
-	font-family: Verdana, Arial, Helvetica;
-	font-size: 11px;
+	font-family: inherit;
+	font-size: 13px;
 	text-align: right;
 }
 
 input.amount {
-	padding-right: 0px;
+	padding-right: 8px;
 }
 
 .editbutton {
-   color:#0000FF;
+   color: var(--knb-link);
    background-color:transparent;
    border-style:none;
    text-decoration:underline;
@@ -455,11 +533,11 @@ input.amount {
 }
 
 button.navibutton {
-	font-family: Verdana, Arial, Helvetica;
-	font-size: 11px;
-	font-weight: bold;
-   color:#000;
-   padding: 0 3px;
+	font-family: inherit;
+	font-size: 13px;
+	font-weight: 600;
+   color: var(--knb-link);
+   padding: 2px 6px;
    background-color:transparent;
    border-style:none;
    cursor: pointer;
@@ -467,13 +545,14 @@ button.navibutton {
 
 .navibutton span {
 	text-decoration: underline;
-}	
+}
 
 .navibar {
-    padding: 0 3px;
-	color: #000;
+    padding: 6px 8px;
+	color: var(--knb-text);
     border-collapse: collapse;
-    background-color: #F0EBD8;
+    background-color: var(--knb-cream);
+    border-radius: 6px;
 }
 
 .navibar tr td {
@@ -487,8 +566,8 @@ button.navibutton {
 ul.ajaxtabs{
 	padding: 3px 0 0 0;
 	margin: 3px 3px 0 3px;
-	font: 12px Tahoma,Verdana;
-	font-weight: bold;
+	font: 12px Inter, Verdana;
+	font-weight: 600;
 }
 
 ul.ajaxtabs li{
@@ -498,49 +577,49 @@ ul.ajaxtabs li{
 }
 
 ul.ajaxtabs li button{
-    background-color: #F0EBD8;
-/*	background-repeat: repeat-x;
-	background-position: top; */
-	padding: 3px 8px;
+    background-color: var(--knb-cream);
+	padding: 6px 12px;
 	margin: 0px;
-	border-top: 1px solid #C9BFA0;
-	border-right: 1px solid #C9BFA0;
+	border: 1px solid var(--knb-tan);
 	border-bottom: none;
-	border-left: none;
-	font-weight: bold;
+	border-radius: 6px 6px 0 0;
+	font-weight: 600;
 }
 
 ul.ajaxtabs li button:hover{
-	border-top: 1px solid #C9BFA0;
+	border-top: 1px solid var(--knb-tan);
+	background-color: var(--knb-green);
 	color:#FFFFFF;
 }
 div.spaceBox{
-	background-color: #C9BFA0;
+	background-color: var(--knb-tan);
 	height:8px;
-	border-bottom: 1px solid #C9BFA0;
-	border-left: 1px solid #C9BFA0;
-	border-right:1px solid #C9BFA0;
+	border-bottom: 1px solid var(--knb-tan);
+	border-left: 1px solid var(--knb-tan);
+	border-right:1px solid var(--knb-tan);
 	margin: 0 3px 0px 3px
 }
 
 div.contentBox{
-	border: 1px solid #C9BFA0;
+	border: 1px solid var(--knb-tan);
+	border-radius: 0 0 6px 6px;
 	margin: 0 3px 3px 3px
 }
 
 ul.ajaxtabs li button.current, ul.ajaxtabs li button.current:hover{
-	border-left: 1px solid #C9BFA0;
-	background-color: #C9BFA0;
+	border-left: 1px solid var(--knb-tan);
+	background-color: var(--knb-green-dark);
 	color:#FFFFFF;
 }
 #hints {
 	font-size: 13px;
-	padding: 5px;
-	border-bottom: 1px solid #C9BFA0;
-	margin: -4px -2px -2px;
-	border: 1px solid #C9BFA0;
-	background-color: #FFFFE0;
-	white-space: nowrap;
+	padding: 8px 10px;
+	border-bottom: 1px solid #f0e6a8;
+	margin: 8px 0;
+	border: 1px solid #f0e6a8;
+	border-radius: 6px;
+	background-color: #fffbe0;
+	white-space: normal;
 }
 /*
 	Calendar style
@@ -554,18 +633,21 @@ ul.ajaxtabs li button.current, ul.ajaxtabs li button.current:hover{
 	width: 270px;
 	z-index: 99;
 }
-#CC { 
+#CC {
 	position:absolute;
 	background-color:#FFF;
 	margin:0; padding:0;
 	display:none;
 	z-index: 100;
+	border-radius: 8px;
+	box-shadow: var(--knb-shadow);
+	overflow: hidden;
 }
-#CC table { 
-	font-family: arial, verdana, helvetica, sans-serif;
+#CC table {
+	font-family: 'Inter', arial, verdana, helvetica, sans-serif;
 	font-size: 8pt;
-	border-left: 1px solid #336;
-	border-right: 1px solid #336;
+	border-left: none;
+	border-right: none;
 }
 #CC th {
 	font-weight: normal;
@@ -581,7 +663,7 @@ ul.ajaxtabs li button.current, ul.ajaxtabs li button.current:hover{
 	text-align: center;
 }
 #CC .header {
-	background-color: #4A6B17;
+	background-color: var(--knb-green-dark);
 }
 #CC .weekday {
 	background-color: #eee;
@@ -597,7 +679,7 @@ ul.ajaxtabs li button.current, ul.ajaxtabs li button.current:hover{
 }
 #CC .current {
 	border: 1px solid #339;
-	background-color: #4A6B17;
+	background-color: var(--knb-green);
 	color: #FFF;
 }
 #CC .weekday, #CC .weekend, #CC .current {
@@ -605,10 +687,11 @@ ul.ajaxtabs li button.current, ul.ajaxtabs li button.current:hover{
 	text-decoration: none;
 	border: 1px solid #FFF;
 	width: 2em;
+	border-radius: 4px;
 }
 #CC .weekday:hover, #CC .weekend:hover, #CC .current:hover {
 	color: #FFF;
-	background-color: #4A6B17;
+	background-color: var(--knb-green);
 	border: 1px solid #999;
 }
 #CC .previous {
@@ -628,7 +711,7 @@ ul.ajaxtabs li button.current, ul.ajaxtabs li button.current:hover{
 }
 #CC .title {
 	text-align: center;
-	font-weight: bold; 
+	font-weight: bold;
 	color: #FFF;
 }
 #CC .empty {
@@ -638,28 +721,31 @@ ul.ajaxtabs li button.current, ul.ajaxtabs li button.current:hover{
 
 div.err_msg {
 	margin: 10px;
-	padding: 3px;
-	border: 1px solid #cc3300;
-	background-color: #ffcccc;
-	color: #dd2200;
+	padding: 10px 14px;
+	border: 1px solid #f1b0a8;
+	border-radius: 6px;
+	background-color: #fdecea;
+	color: #c0392b;
 	text-align: center;
 }
 
 div.warn_msg {
 	margin: 10px;
-	padding: 3px;
-	border: 1px solid #ff9900;
-	background-color: #ffff00;
-	color: #ff5500;
+	padding: 10px 14px;
+	border: 1px solid #f5d998;
+	border-radius: 6px;
+	background-color: #fff8e6;
+	color: #a3670a;
 	text-align: center;
 }
 
 div.note_msg {
-	margin: 10px; 
-	padding: 3px;
-	border: 1px solid #33cc00;
-	background-color: #ccffcc;
-	color: #007700;
+	margin: 10px;
+	padding: 10px 14px;
+	border: 1px solid #b7dfa8;
+	border-radius: 6px;
+	background-color: #eefbe8;
+	color: #2e7d32;
 	text-align: center;
 }
 
@@ -669,17 +755,17 @@ div.note_msg {
 }
 
 @media screen and (min-width: 1024px) {
-	body, .headingtext3 { font-size: 11px; }
+	body, .headingtext3 { font-size: 13px; }
 	textarea { font-size: 13px; }
-	tr, td, th, input, select, a, button, .inputsubmit, .ajaxsubmit, .amount, button.navibutton { font-size: 12px; }
+	tr, td, th, input, select, a, button, .inputsubmit, .ajaxsubmit, .amount, button.navibutton { font-size: 13px; }
 	.quick_menu_selected, .menu_group, .titletext, .headingtext, .headingtext2, .errortext, #hints { font-size: 14px; }
-	.bottomBarCell { font-size: 11px; line-height: 13px; }
+	.bottomBarCell { font-size: 11px; line-height: 14px; }
 	.footer, .footer td a { font-size: 10px; }
 	#CC table { font-size: 9pt; }
 	#CC .previous, #CC .next { font-size: 1.4em; }
 }
 @media screen and (min-width: 1200px) {
-	body, .headingtext3 { font-size: 12px; }
+	body, .headingtext3 { font-size: 13px; }
 	textarea { font-size: 14px; }
 	tr, td, th, input, select, a, button, .inputsubmit, .ajaxsubmit, .amount, button.navibutton { font-size: 13px; }
 	.quick_menu_selected, .menu_group, .titletext, .headingtext, .headingtext2, .errortext, #hints { font-size: 15px; }
@@ -687,4 +773,9 @@ div.note_msg {
 	.footer, .footer td a { font-size: 11px; }
 	#CC table { font-size: 10pt; }
 	#CC .previous, #CC .next { font-size: 1.4em; }
+}
+@media screen and (max-width: 700px) {
+	.callout_main { padding: 0 4px; }
+	div.tabs a { padding: 8px 10px; font-size: 12px; }
+	.login { width: 92vw; }
 }

@@ -527,7 +527,7 @@ function user_dec_sep()
 
 function user_theme()
 {
-	return isset($_SESSION["wa_current_user"]) ? $_SESSION["wa_current_user"]->prefs->get_theme() : 'default';
+	return isset($_SESSION["wa_current_user"]) ? $_SESSION["wa_current_user"]->prefs->get_theme() : 'knbgroup';
 }
 
 function user_pagesize()
