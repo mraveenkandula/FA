@@ -48,10 +48,17 @@ if (isset($_POST['SetCredentials']) && !empty($_POST['debtor_no']))
 	$selected_id = $_POST['debtor_no'];
 }
 
-if (isset($_GET['toggle']) && isset($_GET['debtor_no']))
+$toggle_id = find_submit('ToggleOn_');
+if ($toggle_id != -1)
 {
-	set_portal_active($_GET['debtor_no'], $_GET['toggle'] == '1');
-	$selected_id = $_GET['debtor_no'];
+	set_portal_active($toggle_id, true);
+	$selected_id = $toggle_id;
+}
+$toggle_id = find_submit('ToggleOff_');
+if ($toggle_id != -1)
+{
+	set_portal_active($toggle_id, false);
+	$selected_id = $toggle_id;
 }
 
 if ($message)
@@ -75,9 +82,10 @@ while ($row = db_fetch($result))
 	echo "<a href='distributor_access.php?edit=".$row['debtor_no']."'>"._("Set Password")."</a>";
 	if ($row['portal_username'])
 	{
-		echo " | <a href='distributor_access.php?toggle=".($row['portal_active'] ? '0' : '1')."&debtor_no=".$row['debtor_no']."'>";
+		$toggle_name = ($row['portal_active'] ? 'ToggleOff_' : 'ToggleOn_').$row['debtor_no'];
+		echo " <button type='submit' name='".$toggle_name."' value='1'>";
 		echo ($row['portal_active'] ? _("Disable") : _("Enable"));
-		echo "</a>";
+		echo "</button>";
 	}
 	echo "</td>";
 	end_row();
