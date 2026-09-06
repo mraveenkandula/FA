@@ -70,4 +70,12 @@ $installed_extensions = array (
 		'active' => true,
 		'urank' => 8,
 	),
+	9 => array(
+		'name' => 'KNB Group Schemes',
+		'package' => 'knb_schemes',
+		'version' => '1.0',
+		'path' => 'modules/knb_schemes',
+		'active' => true,
+		'urank' => 9,
+	),
 );
