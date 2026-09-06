@@ -18,7 +18,7 @@ include_once(__DIR__ . "/distributor_access_db.inc");
 $selected_id = null;
 $message = null;
 
-if (isset($_POST['SetCredentials']) && !empty($_POST['debtor_no']))
+if (isset($_POST['SetCredentials']) && !empty($_POST['debtor_no']) && check_csrf_token())
 {
 	$username = trim($_POST['portal_username']);
 	$password = $_POST['portal_password'];
@@ -48,17 +48,20 @@ if (isset($_POST['SetCredentials']) && !empty($_POST['debtor_no']))
 	$selected_id = $_POST['debtor_no'];
 }
 
-$toggle_id = find_submit('ToggleOn_');
-if ($toggle_id != -1)
+$toggle_on_id = find_submit('ToggleOn_');
+$toggle_off_id = find_submit('ToggleOff_');
+if (($toggle_on_id != -1 || $toggle_off_id != -1) && check_csrf_token())
 {
-	set_portal_active($toggle_id, true);
-	$selected_id = $toggle_id;
-}
-$toggle_id = find_submit('ToggleOff_');
-if ($toggle_id != -1)
-{
-	set_portal_active($toggle_id, false);
-	$selected_id = $toggle_id;
+	if ($toggle_on_id != -1)
+	{
+		set_portal_active($toggle_on_id, true);
+		$selected_id = $toggle_on_id;
+	}
+	if ($toggle_off_id != -1)
+	{
+		set_portal_active($toggle_off_id, false);
+		$selected_id = $toggle_off_id;
+	}
 }
 
 if ($message)
@@ -91,7 +94,6 @@ while ($row = db_fetch($result))
 	end_row();
 }
 end_table(1);
-end_form();
 
 if (isset($_GET['edit']))
 {
@@ -99,15 +101,14 @@ if (isset($_GET['edit']))
 	if ($customer)
 	{
 		display_note(sprintf(_("Set portal credentials for %s"), $customer['name']), 1, 1);
-		start_form();
 		hidden('debtor_no', $customer['debtor_no']);
 		start_table(TABLESTYLE2);
 		text_row(_("Username").':', 'portal_username', $customer['portal_username'] ?: $customer['debtor_ref'], 30, 60);
 		text_row(_("New Password").':', 'portal_password', '', 30, 60);
 		end_table();
 		submit_center('SetCredentials', _("Save"), true, '', 'default');
-		end_form();
 	}
 }
 
+end_form();
 end_page();
