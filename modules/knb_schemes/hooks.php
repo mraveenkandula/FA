@@ -33,6 +33,7 @@ class hooks_knb_schemes extends hooks
 	{
 		$updates = array(
 			'knb_schemes.sql' => array('knb_schemes', 'id', 'ANY'),
+			'knb_schemes_promotion_types.sql' => array('knb_schemes', 'promotion_type', 'ANY'),
 		);
 		return $this->update_databases(-1, $updates, $check_only);
 	}
