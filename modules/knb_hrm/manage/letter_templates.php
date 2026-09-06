@@ -1,7 +1,8 @@
 <?php
-$page_security = 'SA_OPEN';
+$page_security = 'SA_KNB_LETTER_MANAGE';
 $path_to_root = "../../..";
 include_once($path_to_root . "/includes/session.inc");
+add_access_extensions();
 
 page(_($help_context = "Letter Templates"));
 
@@ -27,19 +28,19 @@ function can_process()
 	return true;
 }
 
-if ($Mode=='ADD_ITEM' && can_process())
+if ($Mode=='ADD_ITEM' && can_process() && check_csrf_token())
 {
 	add_letter_template($_POST['name'], $_POST['subject'], $_POST['body']);
 	display_notification(_('New letter template has been added'));
 	$Mode = 'RESET';
 }
-if ($Mode=='UPDATE_ITEM' && can_process())
+if ($Mode=='UPDATE_ITEM' && can_process() && check_csrf_token())
 {
 	update_letter_template($selected_id, $_POST['name'], $_POST['subject'], $_POST['body']);
 	display_notification(_('Selected letter template has been updated'));
 	$Mode = 'RESET';
 }
-if ($Mode == 'Delete')
+if ($Mode == 'Delete' && check_csrf_token())
 {
 	delete_letter_template($selected_id);
 	display_notification(_('Selected letter template has been deleted'));

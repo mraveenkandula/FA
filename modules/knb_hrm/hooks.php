@@ -36,6 +36,13 @@ class hooks_knb_hrm extends hooks
 		// account numbers - SA_OPEN (any logged-in user) is fine for
 		// attendance/leave but not for this, so it gets its own area.
 		$security_areas['SA_KNB_PAYROLL_VIEW'] = array(1<<8|3, _("View payroll and HR records (salary, PAN/Aadhaar, bank details)"));
+		// Letter templates are official company correspondence (offer/
+		// experience/appointment letters) and Generate Letter produces a
+		// signed-looking document for an arbitrary employee - SA_OPEN
+		// (any logged-in user) is too broad for either, unlike the plain
+		// department/designation/leave-type maintenance elsewhere in this
+		// module.
+		$security_areas['SA_KNB_LETTER_MANAGE'] = array(1<<8|4, _("Manage HR letter templates and generate employee letters"));
 		$security_sections = array(1<<8 => _("KNB Group HRM"));
 		return array($security_areas, $security_sections);
 	}
@@ -73,7 +80,7 @@ class knb_hrm_app extends application
 		$this->add_lapp_function(1, _("HR &Records Inquiry"),
 			"modules/knb_hrm/inquiry/hr_records_inquiry.php", 'SA_KNB_PAYROLL_VIEW', MENU_INQUIRY);
 		$this->add_lapp_function(1, _("&Generate Letter"),
-			"modules/knb_hrm/inquiry/generate_letter.php", 'SA_OPEN', MENU_INQUIRY);
+			"modules/knb_hrm/inquiry/generate_letter.php", 'SA_KNB_LETTER_MANAGE', MENU_INQUIRY);
 
 		$this->add_module(_("Maintenance"));
 		$this->add_lapp_function(2, _("&Departments"),
@@ -85,7 +92,7 @@ class knb_hrm_app extends application
 		$this->add_lapp_function(2, _("Lea&ve Types"),
 			"modules/knb_hrm/manage/leave_types.php", 'SA_OPEN', MENU_MAINTENANCE);
 		$this->add_lapp_function(2, _("Letter &Templates"),
-			"modules/knb_hrm/manage/letter_templates.php", 'SA_OPEN', MENU_MAINTENANCE);
+			"modules/knb_hrm/manage/letter_templates.php", 'SA_KNB_LETTER_MANAGE', MENU_MAINTENANCE);
 
 		$this->add_extensions();
 	}
