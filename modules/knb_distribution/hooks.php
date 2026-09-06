@@ -25,6 +25,12 @@ class hooks_knb_distribution extends hooks
 					"modules/knb_distribution/manage/customer_mapping.php", 'SA_CUSTOMER', MENU_MAINTENANCE);
 				$app->add_lapp_function(1, _("Customers by Territor&y/Beat"),
 					"modules/knb_distribution/inquiry/customers_by_area.php", 'SA_CUSTOMER', MENU_INQUIRY);
+				$app->add_lapp_function(1, _("Customers &Birthday List"),
+					"modules/knb_distribution/inquiry/customer_birthday_list.php", 'SA_CUSTOMER', MENU_INQUIRY);
+				$app->add_lapp_function(1, _("Customers Birthday &Calendar"),
+					"modules/knb_distribution/inquiry/customer_birthday_calendar.php", 'SA_CUSTOMER', MENU_INQUIRY);
+				$app->add_lapp_function(1, _("Retailer T&own Details Inquiry"),
+					"modules/knb_distribution/inquiry/retailer_town_inquiry.php", 'SA_CUSTOMER', MENU_INQUIRY);
 				break;
 		}
 	}
@@ -33,6 +39,7 @@ class hooks_knb_distribution extends hooks
 	{
 		$updates = array(
 			'knb_distribution.sql' => array('sales_territories', 'id', 'ANY'),
+			'knb_distribution_birthday.sql' => array('customer_distribution', 'date_of_birth', 'ANY'),
 		);
 		return $this->update_databases(-1, $updates, $check_only);
 	}

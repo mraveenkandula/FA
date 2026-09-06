@@ -47,13 +47,15 @@ if (list_updated('customer_id'))
 {
 	unset($_POST['person_type']); unset($_POST['territory_id']); unset($_POST['town_id']);
 	unset($_POST['beat_id']); unset($_POST['sales_employee_id']);
+	unset($_POST['date_of_birth']); unset($_POST['phone']);
 }
 
 if (isset($_POST['SaveMapping']) && !empty($_POST['customer_id']) && check_csrf_token())
 {
 	save_customer_distribution(
 		$_POST['customer_id'], $_POST['person_type'], $_POST['territory_id'],
-		$_POST['town_id'], $_POST['beat_id'], $_POST['sales_employee_id']
+		$_POST['town_id'], $_POST['beat_id'], $_POST['sales_employee_id'],
+		$_POST['date_of_birth'], $_POST['phone']
 	);
 	display_notification(_('Customer distribution mapping saved.'));
 }
@@ -72,6 +74,8 @@ if (!empty($_POST['customer_id']) && !isset($_POST['person_type']))
 		$_POST['town_id'] = $existing['town_id'];
 		$_POST['beat_id'] = $existing['beat_id'];
 		$_POST['sales_employee_id'] = $existing['sales_employee_id'];
+		$_POST['date_of_birth'] = $existing['date_of_birth'] ? sql2date($existing['date_of_birth']) : '';
+		$_POST['phone'] = $existing['phone'];
 	}
 }
 
@@ -80,6 +84,8 @@ array_selector_row(_("Territory").':', 'territory_id', @$_POST['territory_id'], 
 array_selector_row(_("Town").':', 'town_id', @$_POST['town_id'], town_list());
 array_selector_row(_("Beat").':', 'beat_id', @$_POST['beat_id'], beat_list());
 array_selector_row(_("Sales Employee").':', 'sales_employee_id', @$_POST['sales_employee_id'], employee_list());
+text_row_ex(_("Phone").':', 'phone', 20);
+date_row(_("Date of Birth").':', 'date_of_birth', '', null, 0, 0, 1001);
 end_table();
 
 if (!empty($_POST['customer_id']))

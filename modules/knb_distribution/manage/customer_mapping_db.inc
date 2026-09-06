@@ -7,13 +7,15 @@ function get_customer_distribution($debtor_no)
 	return db_fetch($result);
 }
 
-function save_customer_distribution($debtor_no, $person_type, $territory_id, $town_id, $beat_id, $sales_employee_id)
+function save_customer_distribution($debtor_no, $person_type, $territory_id, $town_id, $beat_id, $sales_employee_id,
+	$date_of_birth=null, $phone=null)
 {
 	$sql = "REPLACE INTO ".TB_PREF."customer_distribution
-		(debtor_no, person_type, territory_id, town_id, beat_id, sales_employee_id)
+		(debtor_no, person_type, territory_id, town_id, beat_id, sales_employee_id, date_of_birth, phone)
 		VALUES (".db_escape($debtor_no).",".db_escape($person_type).","
 		.db_escape($territory_id ?: null, true).",".db_escape($town_id ?: null, true).","
-		.db_escape($beat_id ?: null, true).",".db_escape($sales_employee_id ?: null, true).")";
+		.db_escape($beat_id ?: null, true).",".db_escape($sales_employee_id ?: null, true).","
+		.db_escape($date_of_birth ? date2sql($date_of_birth) : null, true).",".db_escape($phone ?: null, true).")";
 	db_query($sql, "could not save customer distribution mapping");
 }
 
