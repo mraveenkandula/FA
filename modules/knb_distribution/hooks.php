@@ -16,15 +16,15 @@ class hooks_knb_distribution extends hooks
 		switch ($app->id) {
 			case 'orders':
 				$app->add_lapp_function(2, _("&Territories"),
-					"modules/knb_distribution/manage/territories.php", 'SA_OPEN', MENU_MAINTENANCE);
+					"modules/knb_distribution/manage/territories.php", 'SA_CUSTOMER', MENU_MAINTENANCE);
 				$app->add_lapp_function(2, _("T&owns"),
-					"modules/knb_distribution/manage/towns.php", 'SA_OPEN', MENU_MAINTENANCE);
+					"modules/knb_distribution/manage/towns.php", 'SA_CUSTOMER', MENU_MAINTENANCE);
 				$app->add_lapp_function(2, _("&Beats"),
-					"modules/knb_distribution/manage/beats.php", 'SA_OPEN', MENU_MAINTENANCE);
+					"modules/knb_distribution/manage/beats.php", 'SA_CUSTOMER', MENU_MAINTENANCE);
 				$app->add_lapp_function(2, _("Customer &Distribution Mapping"),
-					"modules/knb_distribution/manage/customer_mapping.php", 'SA_OPEN', MENU_MAINTENANCE);
+					"modules/knb_distribution/manage/customer_mapping.php", 'SA_CUSTOMER', MENU_MAINTENANCE);
 				$app->add_lapp_function(1, _("Customers by Territor&y/Beat"),
-					"modules/knb_distribution/inquiry/customers_by_area.php", 'SA_OPEN', MENU_INQUIRY);
+					"modules/knb_distribution/inquiry/customers_by_area.php", 'SA_CUSTOMER', MENU_INQUIRY);
 				break;
 		}
 	}

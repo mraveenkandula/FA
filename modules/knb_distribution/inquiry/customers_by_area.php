@@ -1,5 +1,5 @@
 <?php
-$page_security = 'SA_OPEN';
+$page_security = 'SA_CUSTOMER';
 $path_to_root = "../../..";
 include_once($path_to_root . "/includes/session.inc");
 
