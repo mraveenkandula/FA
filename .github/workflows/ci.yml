@@ -51,6 +51,9 @@ jobs:
           name: coverage-report
           path: coverage.xml
 
+      - name: Enforce 80% coverage gate
+        run: php tests/check_coverage.php coverage.xml
+
   snyk:
     name: Snyk security scan
     runs-on: ubuntu-latest
