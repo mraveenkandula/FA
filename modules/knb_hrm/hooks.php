@@ -31,6 +31,10 @@ class hooks_knb_hrm extends hooks
 	{
 		$security_areas['SA_KNB_EXPENSE_APPROVE'] = array(1<<8|1, _("Approve employee expense claims"));
 		$security_areas['SA_KNB_LEAVE_APPROVE'] = array(1<<8|2, _("Approve employee leave requests"));
+		// Payroll/HR records carry salary figures, PAN, Aadhaar and bank
+		// account numbers - SA_OPEN (any logged-in user) is fine for
+		// attendance/leave but not for this, so it gets its own area.
+		$security_areas['SA_KNB_PAYROLL_VIEW'] = array(1<<8|3, _("View payroll and HR records (salary, PAN/Aadhaar, bank details)"));
 		$security_sections = array(1<<8 => _("KNB Group HRM"));
 		return array($security_areas, $security_sections);
 	}
@@ -64,9 +68,9 @@ class knb_hrm_app extends application
 		$this->add_lapp_function(1, _("Lea&ve Inquiry"),
 			"modules/knb_hrm/inquiry/leave_inquiry.php", 'SA_OPEN', MENU_INQUIRY);
 		$this->add_lapp_function(1, _("Pa&yroll Records Inquiry"),
-			"modules/knb_hrm/inquiry/payroll_records_inquiry.php", 'SA_OPEN', MENU_INQUIRY);
+			"modules/knb_hrm/inquiry/payroll_records_inquiry.php", 'SA_KNB_PAYROLL_VIEW', MENU_INQUIRY);
 		$this->add_lapp_function(1, _("HR &Records Inquiry"),
-			"modules/knb_hrm/inquiry/hr_records_inquiry.php", 'SA_OPEN', MENU_INQUIRY);
+			"modules/knb_hrm/inquiry/hr_records_inquiry.php", 'SA_KNB_PAYROLL_VIEW', MENU_INQUIRY);
 
 		$this->add_module(_("Maintenance"));
 		$this->add_lapp_function(2, _("&Departments"),
