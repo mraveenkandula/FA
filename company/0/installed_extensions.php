@@ -78,4 +78,12 @@ $installed_extensions = array (
 		'active' => true,
 		'urank' => 9,
 	),
+	10 => array(
+		'name' => 'KNB Group Dashboard',
+		'package' => 'knb_dashboard',
+		'version' => '1.0',
+		'path' => 'modules/knb_dashboard',
+		'active' => true,
+		'urank' => 10,
+	),
 );
