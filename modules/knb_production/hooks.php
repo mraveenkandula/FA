@@ -1,10 +1,12 @@
 <?php
 /*
 	KNB Group Production extension.
-	Multi-stage production batch tracking (raw material -> semi-finished ->
-	finished goods) with yield % and quality params - the real dairy-specific
-	gap. TechCloud's FG/SFG work-order split tracks two production stages but
-	never records yield or quality; this fills that in.
+	Production Batch Entry drives core FrontAccounting Work Orders
+	(add_work_order/release_work_order/add_work_order_issue/work_order_produce)
+	so batches actually move real stock and post real WIP/inventory costing,
+	instead of only logging to a disconnected table. Fat/moisture/incharge -
+	fields core has no place for - are kept in knb_production_quality, keyed
+	to the real workorder id.
 */
 
 class hooks_knb_production extends hooks
@@ -26,7 +28,7 @@ class hooks_knb_production extends hooks
 	function install_extension($check_only=true)
 	{
 		$updates = array(
-			'knb_production.sql' => array('production_batches', 'id', 'ANY'),
+			'knb_production.sql' => array('knb_production_quality', 'workorder_id', 'ANY'),
 		);
 		return $this->update_databases(-1, $updates, $check_only);
 	}
