@@ -152,8 +152,7 @@
 			{
 				echo "<table align='center' id='footer'>\n";
 				echo "<tr>\n";
-				echo "<td align='center' class='footer'><a target='_blank' href='".$SysPrefs->power_url."' tabindex='-1'><font color='#ffffff'>".$SysPrefs->app_title
-					." $version - " . _("Theme:") . " " . user_theme() . " - ".show_users_online()."</font></a></td>\n";
+				echo "<td align='center' class='footer'><font color='#ffffff'>&copy; " . date('Y') . " KNB Group &middot; Godavari Ghee &nbsp;|&nbsp; Mandapeta, Andhra Pradesh &nbsp;|&nbsp; +91 9666755555 &nbsp;|&nbsp; Info@knbgroup.in</font></td>\n";
 				echo "</tr>\n";
 				echo "<tr>\n";
 				echo "<td align='center' class='footer'><a target='_blank' href='".$SysPrefs->power_url

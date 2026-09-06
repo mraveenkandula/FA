@@ -169,7 +169,7 @@ function defaultCompany()
 	echo "</tr></table>\n";
 	echo "<table class='footer'>\n";
 	echo "<tr>\n";
-	echo "<td><a target='_blank' href='".$SysPrefs->power_url."' tabindex='-1'>".$SysPrefs->app_title." $version - " . _("Theme:") . " " . $def_theme . "</a></td>\n";
+	echo "<td>&copy; " . date('Y') . " KNB Group &middot; Godavari Ghee &nbsp;|&nbsp; Mandapeta, Andhra Pradesh &nbsp;|&nbsp; +91 9666755555 &nbsp;|&nbsp; Info@knbgroup.in</td>\n";
 	echo "</tr>\n";
 	echo "<tr>\n";
 	echo "<td><a target='_blank' href='".$SysPrefs->power_url."' tabindex='-1'>".$SysPrefs->power_by."</a></td>\n";
