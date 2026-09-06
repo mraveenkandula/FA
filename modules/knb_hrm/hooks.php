@@ -40,7 +40,7 @@ class knb_hrm_app extends application
 		$this->add_lapp_function(0, _("Employee &Expense Claim"),
 			"modules/knb_hrm/manage/expense_claim_entry.php", 'SA_PAYMENT', MENU_TRANSACTION);
 		$this->add_lapp_function(0, _("Expense Claim A&pproval"),
-			"modules/knb_hrm/manage/expense_claim_approval.php", 'SA_PAYMENT', MENU_TRANSACTION);
+			"modules/knb_hrm/manage/expense_claim_approval.php", 'SA_BANKTRANSFER', MENU_TRANSACTION);
 
 		$this->add_module(_("Inquiries and Reports"));
 		$this->add_lapp_function(1, _("&Attendance Inquiry"),

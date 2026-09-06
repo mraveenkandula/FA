@@ -1,5 +1,5 @@
 <?php
-$page_security = 'SA_PAYMENT';
+$page_security = 'SA_BANKTRANSFER';
 $path_to_root = "../../..";
 include_once($path_to_root . "/includes/session.inc");
 

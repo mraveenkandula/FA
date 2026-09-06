@@ -27,7 +27,7 @@ class hooks_knb_inventory_ext extends hooks
 				$app->add_rapp_function(0, _("Stock Transfer &Request"),
 					"modules/knb_inventory_ext/manage/transfer_request.php", 'SA_LOCATIONTRANSFER', MENU_TRANSACTION);
 				$app->add_rapp_function(0, _("Stock Location &Approved"),
-					"modules/knb_inventory_ext/manage/transfer_approval.php", 'SA_LOCATIONTRANSFER', MENU_TRANSACTION);
+					"modules/knb_inventory_ext/manage/transfer_approval.php", 'SA_ITEM', MENU_TRANSACTION);
 				break;
 		}
 	}
