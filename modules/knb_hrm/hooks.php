@@ -21,6 +21,7 @@ class hooks_knb_hrm extends hooks
 			'knb_hrm.sql' => array('hr_departments', 'id', 'ANY'),
 			'knb_hrm_attendance.sql' => array('hr_attendance', 'id', 'ANY'),
 			'knb_hrm_expense_claims.sql' => array('hr_expense_claims', 'id', 'ANY'),
+			'knb_hrm_leave.sql' => array('knb_leave_types', 'id', 'ANY'),
 		);
 		return $this->update_databases(-1, $updates, $check_only);
 	}
@@ -28,6 +29,7 @@ class hooks_knb_hrm extends hooks
 	function install_access()
 	{
 		$security_areas['SA_KNB_EXPENSE_APPROVE'] = array(1<<8|1, _("Approve employee expense claims"));
+		$security_areas['SA_KNB_LEAVE_APPROVE'] = array(1<<8|2, _("Approve employee leave requests"));
 		$security_sections = array(1<<8 => _("KNB Group HRM"));
 		return array($security_areas, $security_sections);
 	}
@@ -48,12 +50,18 @@ class knb_hrm_app extends application
 			"modules/knb_hrm/manage/expense_claim_entry.php", 'SA_PAYMENT', MENU_TRANSACTION);
 		$this->add_lapp_function(0, _("Expense Claim A&pproval"),
 			"modules/knb_hrm/manage/expense_claim_approval.php", 'SA_KNB_EXPENSE_APPROVE', MENU_TRANSACTION);
+		$this->add_lapp_function(0, _("&Leave Entry"),
+			"modules/knb_hrm/manage/leave_entry.php", 'SA_OPEN', MENU_TRANSACTION);
+		$this->add_lapp_function(0, _("Leave A&pproval"),
+			"modules/knb_hrm/manage/leave_approval.php", 'SA_KNB_LEAVE_APPROVE', MENU_TRANSACTION);
 
 		$this->add_module(_("Inquiries and Reports"));
 		$this->add_lapp_function(1, _("&Attendance Inquiry"),
 			"modules/knb_hrm/inquiry/attendance_inquiry.php", 'SA_OPEN', MENU_INQUIRY);
 		$this->add_lapp_function(1, _("Geo Trac&king Inquiry"),
 			"modules/knb_hrm/inquiry/geo_tracking_inquiry.php", 'SA_OPEN', MENU_INQUIRY);
+		$this->add_lapp_function(1, _("Lea&ve Inquiry"),
+			"modules/knb_hrm/inquiry/leave_inquiry.php", 'SA_OPEN', MENU_INQUIRY);
 
 		$this->add_module(_("Maintenance"));
 		$this->add_lapp_function(2, _("&Departments"),
@@ -62,6 +70,8 @@ class knb_hrm_app extends application
 			"modules/knb_hrm/manage/designation.php", 'SA_OPEN', MENU_MAINTENANCE);
 		$this->add_lapp_function(2, _("&Employees"),
 			"modules/knb_hrm/manage/employee.php", 'SA_OPEN', MENU_MAINTENANCE);
+		$this->add_lapp_function(2, _("Lea&ve Types"),
+			"modules/knb_hrm/manage/leave_types.php", 'SA_OPEN', MENU_MAINTENANCE);
 
 		$this->add_extensions();
 	}
