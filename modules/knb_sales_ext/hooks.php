@@ -20,8 +20,6 @@ class hooks_knb_sales_ext extends hooks
 					"modules/knb_sales_ext/manage/lead_entry.php", 'SA_CUSTOMER', MENU_TRANSACTION);
 				$app->add_lapp_function(0, _("Sales &Target Entry"),
 					"modules/knb_sales_ext/manage/target_entry.php", 'SA_CUSTOMER', MENU_TRANSACTION);
-				$app->add_lapp_function(0, _("&Expense Booking"),
-					"modules/knb_sales_ext/manage/expense_entry.php", 'SA_CUSTOMER', MENU_TRANSACTION);
 
 				$app->add_lapp_function(1, _("Journey Plan In&quiry"),
 					"modules/knb_sales_ext/inquiry/journey_plan_inquiry.php", 'SA_CUSTOMER', MENU_INQUIRY);
@@ -29,8 +27,6 @@ class hooks_knb_sales_ext extends hooks
 					"modules/knb_sales_ext/inquiry/lead_inquiry.php", 'SA_CUSTOMER', MENU_INQUIRY);
 				$app->add_lapp_function(1, _("Sales Target && Incentive In&quiry"),
 					"modules/knb_sales_ext/inquiry/incentive_inquiry.php", 'SA_CUSTOMER', MENU_INQUIRY);
-				$app->add_lapp_function(1, _("Expense Claims In&quiry"),
-					"modules/knb_sales_ext/inquiry/expense_inquiry.php", 'SA_CUSTOMER', MENU_INQUIRY);
 
 				$app->add_lapp_function(2, _("Incentive &Tiers"),
 					"modules/knb_sales_ext/manage/incentive_tiers.php", 'SA_CUSTOMER', MENU_MAINTENANCE);
@@ -44,7 +40,6 @@ class hooks_knb_sales_ext extends hooks
 	{
 		$updates = array(
 			'knb_sales_ext.sql' => array('knb_sales_targets', 'id', 'ANY'),
-			'knb_sales_ext_expense.sql' => array('knb_expense_claims', 'id', 'ANY'),
 		);
 		return $this->update_databases(-1, $updates, $check_only);
 	}
