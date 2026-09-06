@@ -884,3 +884,41 @@ div.note_msg {
 	.knb-sidebar { display: none; }
 	.knb-content { padding-left: 0; }
 }
+
+/* KPI card grid - matches the "Today's Insights" / "Billing & Financial"
+   card layout on TechCloud's live Sales dashboards, restyled to this
+   theme's white-card-on-brand-color treatment (same as BrandMark on the
+   field app) instead of their per-card rainbow border colors. */
+.knb-kpi-section-title {
+	font-weight: 700;
+	font-size: 15px;
+	color: var(--knb-green-dark);
+	margin: 20px 0 10px;
+}
+.knb-kpi-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 14px;
+	margin-bottom: 8px;
+}
+.knb-kpi-card {
+	flex: 1 1 200px;
+	min-width: 180px;
+	background: #fff;
+	border: 1px solid var(--knb-tan);
+	border-top: 3px solid var(--knb-gold);
+	border-radius: var(--knb-radius);
+	padding: 14px 16px;
+	box-shadow: var(--knb-shadow);
+}
+.knb-kpi-card-value {
+	font-size: 26px;
+	font-weight: 800;
+	color: var(--knb-green-dark);
+	line-height: 1.2;
+}
+.knb-kpi-card-label {
+	font-size: 12px;
+	color: var(--knb-text);
+	margin-top: 4px;
+}

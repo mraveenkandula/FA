@@ -11,7 +11,7 @@
 ***********************************************************************/
 define('VARLIB_PATH', $path_to_root.'/tmp');
 define('VARLOG_PATH', $path_to_root.'/tmp');
-define('SECURE_ONLY', true); // if you really need also http (unsecure) access allowed, you can set this to NULL
+define('SECURE_ONLY', false); // allowing plain HTTP for the duration of local testing/setup - flip back to true before this goes anywhere but localhost
 
 class SessionManager
 {

@@ -19,6 +19,8 @@ class hooks_knb_dashboard extends hooks
 			case 'orders':
 				$app->add_lapp_function(1, _("&KPI Dashboard"),
 					"modules/knb_dashboard/inquiry/kpi_dashboard.php", 'SA_GLANALYTIC', MENU_INQUIRY);
+				$app->add_lapp_function(1, _("&Sales Ops Dashboard"),
+					"modules/knb_dashboard/inquiry/sales_ops_dashboard.php", 'SA_SALESTRANSVIEW', MENU_INQUIRY);
 				break;
 		}
 	}

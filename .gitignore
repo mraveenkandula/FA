@@ -10,7 +10,13 @@
 /vendor
 /.phpunit.result.cache
 /lang
-/modules
+# stock FrontAccounting ignores /modules wholesale (it expects third-party
+# extensions to be explicitly opted in) - but every module directory in
+# this fork is our own first-party code (modules/knb_*), not a third-party
+# install, and git can't cleanly un-ignore deeply-nested files once a
+# parent directory is excluded (each subfolder would need its own negation
+# line). Simplest correct fix for a fork where modules/ is entirely ours:
+# don't ignore it at all.
 /themes
 !/themes/default
 !/themes/aqua
@@ -23,3 +29,11 @@ installed_extensions.php
 config.php
 config_db.php
 !index.php
+
+# Real customer/business data dumps (PII: names, phones, GSTINs) - never
+# belongs in git, whatever directory it lands in.
+/sql/*.sql
+.DS_Store
+
+# FA's own runtime-generated extension repository cache, not source.
+/modules/_cache
