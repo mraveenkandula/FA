@@ -6,7 +6,7 @@
 	FA extension system documentation.
 */
 
-$next_extension_id = 11; // unique id for next installed extension
+$next_extension_id = 12; // unique id for next installed extension
 
 $installed_extensions = array (
 	1 => array(
@@ -88,5 +88,13 @@ $installed_extensions = array (
 		'path' => 'modules/knb_dashboard',
 		'active' => true,
 		'urank' => 10,
+	),
+	11 => array(
+		'name' => 'KNB Group Distributor Portal',
+		'package' => 'knb_distributor_portal',
+		'version' => '1.0',
+		'path' => 'modules/knb_distributor_portal',
+		'active' => true,
+		'urank' => 11,
 	),
 );
