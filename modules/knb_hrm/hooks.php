@@ -23,6 +23,7 @@ class hooks_knb_hrm extends hooks
 			'knb_hrm_expense_claims.sql' => array('hr_expense_claims', 'id', 'ANY'),
 			'knb_hrm_leave.sql' => array('knb_leave_types', 'id', 'ANY'),
 			'knb_hrm_payroll.sql' => array('knb_payroll', 'id', 'ANY'),
+			'knb_hrm_letters.sql' => array('knb_letter_templates', 'id', 'ANY'),
 		);
 		return $this->update_databases(-1, $updates, $check_only);
 	}
@@ -71,6 +72,8 @@ class knb_hrm_app extends application
 			"modules/knb_hrm/inquiry/payroll_records_inquiry.php", 'SA_KNB_PAYROLL_VIEW', MENU_INQUIRY);
 		$this->add_lapp_function(1, _("HR &Records Inquiry"),
 			"modules/knb_hrm/inquiry/hr_records_inquiry.php", 'SA_KNB_PAYROLL_VIEW', MENU_INQUIRY);
+		$this->add_lapp_function(1, _("&Generate Letter"),
+			"modules/knb_hrm/inquiry/generate_letter.php", 'SA_OPEN', MENU_INQUIRY);
 
 		$this->add_module(_("Maintenance"));
 		$this->add_lapp_function(2, _("&Departments"),
@@ -81,6 +84,8 @@ class knb_hrm_app extends application
 			"modules/knb_hrm/manage/employee.php", 'SA_OPEN', MENU_MAINTENANCE);
 		$this->add_lapp_function(2, _("Lea&ve Types"),
 			"modules/knb_hrm/manage/leave_types.php", 'SA_OPEN', MENU_MAINTENANCE);
+		$this->add_lapp_function(2, _("Letter &Templates"),
+			"modules/knb_hrm/manage/letter_templates.php", 'SA_OPEN', MENU_MAINTENANCE);
 
 		$this->add_extensions();
 	}
