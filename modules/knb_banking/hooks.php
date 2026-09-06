@@ -20,6 +20,8 @@ class hooks_knb_banking extends hooks
 					"modules/knb_banking/manage/import_statement.php", 'SA_OPEN', MENU_TRANSACTION);
 				$app->add_rapp_function(1, _("Bank Statement &Matching"),
 					"modules/knb_banking/inquiry/statement_lines.php", 'SA_OPEN', MENU_INQUIRY);
+				$app->add_rapp_function(1, _("&GST Summary Report"),
+					"modules/knb_banking/inquiry/gst_summary_report.php", 'SA_GLANALYTIC', MENU_INQUIRY);
 				break;
 		}
 	}
