@@ -22,6 +22,7 @@ class hooks_knb_hrm extends hooks
 			'knb_hrm_attendance.sql' => array('hr_attendance', 'id', 'ANY'),
 			'knb_hrm_expense_claims.sql' => array('hr_expense_claims', 'id', 'ANY'),
 			'knb_hrm_leave.sql' => array('knb_leave_types', 'id', 'ANY'),
+			'knb_hrm_payroll.sql' => array('knb_payroll', 'id', 'ANY'),
 		);
 		return $this->update_databases(-1, $updates, $check_only);
 	}
@@ -62,6 +63,10 @@ class knb_hrm_app extends application
 			"modules/knb_hrm/inquiry/geo_tracking_inquiry.php", 'SA_OPEN', MENU_INQUIRY);
 		$this->add_lapp_function(1, _("Lea&ve Inquiry"),
 			"modules/knb_hrm/inquiry/leave_inquiry.php", 'SA_OPEN', MENU_INQUIRY);
+		$this->add_lapp_function(1, _("Pa&yroll Records Inquiry"),
+			"modules/knb_hrm/inquiry/payroll_records_inquiry.php", 'SA_OPEN', MENU_INQUIRY);
+		$this->add_lapp_function(1, _("HR &Records Inquiry"),
+			"modules/knb_hrm/inquiry/hr_records_inquiry.php", 'SA_OPEN', MENU_INQUIRY);
 
 		$this->add_module(_("Maintenance"));
 		$this->add_lapp_function(2, _("&Departments"),
