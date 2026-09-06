@@ -62,4 +62,12 @@ $installed_extensions = array (
 		'active' => true,
 		'urank' => 7,
 	),
+	8 => array(
+		'name' => 'KNB Group Stores Extensions',
+		'package' => 'knb_stores_ext',
+		'version' => '1.0',
+		'path' => 'modules/knb_stores_ext',
+		'active' => true,
+		'urank' => 8,
+	),
 );

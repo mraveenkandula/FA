@@ -6,7 +6,7 @@
 	FA extension system documentation.
 */
 
-$next_extension_id = 8; // unique id for next installed extension
+$next_extension_id = 9; // unique id for next installed extension
 
 $installed_extensions = array (
 	1 => array(
@@ -64,5 +64,13 @@ $installed_extensions = array (
 		'path' => 'modules/knb_sales_ext',
 		'active' => true,
 		'urank' => 7,
+	),
+	8 => array(
+		'name' => 'KNB Group Stores Extensions',
+		'package' => 'knb_stores_ext',
+		'version' => '1.0',
+		'path' => 'modules/knb_stores_ext',
+		'active' => true,
+		'urank' => 8,
 	),
 );
