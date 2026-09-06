@@ -7,6 +7,8 @@
 /company/*/reporting
 /company/*/images
 /tmp
+/vendor
+/.phpunit.result.cache
 /lang
 /modules
 /themes

@@ -1,5 +1,30 @@
 <?php
 
+/*
+	Pure logic, no DB - kept separate from schemes_eligibility_inquiry.php so
+	it can be unit tested without a database. Picks the highest slab target
+	a customer's total_qty qualifies for; deliberately does not assume slabs
+	are passed in ascending target order (they're user-entered in slab_no
+	order, which was the actual bug this was extracted to fix - fixed once
+	already for the inline version, keeping it here as a named, testable unit
+	stops it regressing silently).
+*/
+function find_best_qualifying_slab($slabs, $total_qty)
+{
+	$best_target = -1;
+	$best_slab = null;
+	foreach ($slabs as $slab)
+	{
+		if ($slab['slab_target_qty'] > 0 && $total_qty >= $slab['slab_target_qty']
+			&& $slab['slab_target_qty'] > $best_target)
+		{
+			$best_target = $slab['slab_target_qty'];
+			$best_slab = $slab;
+		}
+	}
+	return $best_slab;
+}
+
 function add_scheme($brand_id, $person_type, $state, $territory_id, $start_date, $end_date, $slabs)
 {
 	begin_transaction();

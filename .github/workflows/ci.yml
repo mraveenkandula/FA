@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  php-lint:
+    name: PHP lint (knb_* modules)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: '8.5'
+
+      - name: Lint every changed knb_* PHP file
+        run: |
+          set -e
+          # only our own modules - vanilla FrontAccounting core is upstream's
+          # problem, not this fork's CI to police.
+          find modules -name '*.php' -o -name '*.inc' | while read -r f; do
+            php -l "$f"
+          done
+
+  test:
+    name: PHPUnit + coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: '8.5'
+          coverage: pcov
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Run PHPUnit with coverage
+        run: vendor/bin/phpunit --coverage-clover coverage.xml --coverage-text
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage.xml
+
+  snyk:
+    name: Snyk security scan
+    runs-on: ubuntu-latest
+    # Only runs once a SNYK_TOKEN secret + this variable are configured -
+    # this fork has no composer dependencies to speak of yet beyond the
+    # phpunit dev-only requirement, so this is mainly `snyk code test`
+    # (static analysis) rather than a dependency vulnerability scan.
+    if: ${{ !!vars.SNYK_ENABLED }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: snyk/actions/php@12140f4059e244892ae643824a95459a102120dd
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+          command: code test
