@@ -17,11 +17,18 @@ class hooks_knb_purchasing extends hooks
 				$app->add_lapp_function(0, _("Purchase &Indent Entry"),
 					"modules/knb_purchasing/manage/indent_entry.php", 'SA_PURCHASEORDER', MENU_TRANSACTION);
 				$app->add_lapp_function(0, _("Purchase Indent &Approval"),
-					"modules/knb_purchasing/manage/indent_approval.php", 'SA_SUPPLIER', MENU_TRANSACTION);
+					"modules/knb_purchasing/manage/indent_approval.php", 'SA_KNB_INDENT_APPROVE', MENU_TRANSACTION);
 				$app->add_lapp_function(1, _("Purchase &Indent Inquiry"),
 					"modules/knb_purchasing/manage/indent_inquiry.php", 'SA_PURCHASEORDER', MENU_INQUIRY);
 				break;
 		}
+	}
+
+	function install_access()
+	{
+		$security_areas['SA_KNB_INDENT_APPROVE'] = array(1<<8|1, _("Approve purchase indents"));
+		$security_sections = array(1<<8 => _("KNB Purchasing"));
+		return array($security_areas, $security_sections);
 	}
 
 	function install_extension($check_only=true)

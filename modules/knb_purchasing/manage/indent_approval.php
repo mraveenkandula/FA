@@ -1,7 +1,8 @@
 <?php
-$page_security = 'SA_SUPPLIER';
+$page_security = 'SA_KNB_INDENT_APPROVE';
 $path_to_root = "../../..";
 include_once($path_to_root . "/includes/session.inc");
+add_access_extensions();
 
 page(_($help_context = "Purchase Indent Approval"));
 

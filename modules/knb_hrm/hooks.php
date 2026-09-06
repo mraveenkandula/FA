@@ -24,6 +24,13 @@ class hooks_knb_hrm extends hooks
 		);
 		return $this->update_databases(-1, $updates, $check_only);
 	}
+
+	function install_access()
+	{
+		$security_areas['SA_KNB_EXPENSE_APPROVE'] = array(1<<8|1, _("Approve employee expense claims"));
+		$security_sections = array(1<<8 => _("KNB Group HRM"));
+		return array($security_areas, $security_sections);
+	}
 }
 
 class knb_hrm_app extends application
@@ -40,7 +47,7 @@ class knb_hrm_app extends application
 		$this->add_lapp_function(0, _("Employee &Expense Claim"),
 			"modules/knb_hrm/manage/expense_claim_entry.php", 'SA_PAYMENT', MENU_TRANSACTION);
 		$this->add_lapp_function(0, _("Expense Claim A&pproval"),
-			"modules/knb_hrm/manage/expense_claim_approval.php", 'SA_BANKTRANSFER', MENU_TRANSACTION);
+			"modules/knb_hrm/manage/expense_claim_approval.php", 'SA_KNB_EXPENSE_APPROVE', MENU_TRANSACTION);
 
 		$this->add_module(_("Inquiries and Reports"));
 		$this->add_lapp_function(1, _("&Attendance Inquiry"),
