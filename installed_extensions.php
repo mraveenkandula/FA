@@ -6,7 +6,7 @@
 	FA extension system documentation.
 */
 
-$next_extension_id = 3; // unique id for next installed extension
+$next_extension_id = 4; // unique id for next installed extension
 
 $installed_extensions = array (
 	1 => array(
@@ -24,5 +24,13 @@ $installed_extensions = array (
 		'path' => 'modules/knb_banking',
 		'active' => true,
 		'urank' => 2,
+	),
+	3 => array(
+		'name' => 'KNB Group Distribution',
+		'package' => 'knb_distribution',
+		'version' => '1.0',
+		'path' => 'modules/knb_distribution',
+		'active' => true,
+		'urank' => 3,
 	),
 );

@@ -22,4 +22,12 @@ $installed_extensions = array (
 		'active' => true,
 		'urank' => 2,
 	),
+	3 => array(
+		'name' => 'KNB Group Distribution',
+		'package' => 'knb_distribution',
+		'version' => '1.0',
+		'path' => 'modules/knb_distribution',
+		'active' => true,
+		'urank' => 3,
+	),
 );
