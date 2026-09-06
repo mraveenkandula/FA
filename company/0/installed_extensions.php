@@ -54,4 +54,12 @@ $installed_extensions = array (
 		'active' => true,
 		'urank' => 6,
 	),
+	7 => array(
+		'name' => 'KNB Group Sales Extensions',
+		'package' => 'knb_sales_ext',
+		'version' => '1.0',
+		'path' => 'modules/knb_sales_ext',
+		'active' => true,
+		'urank' => 7,
+	),
 );
