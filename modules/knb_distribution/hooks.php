@@ -31,6 +31,8 @@ class hooks_knb_distribution extends hooks
 					"modules/knb_distribution/inquiry/customer_birthday_calendar.php", 'SA_CUSTOMER', MENU_INQUIRY);
 				$app->add_lapp_function(1, _("Retailer T&own Details Inquiry"),
 					"modules/knb_distribution/inquiry/retailer_town_inquiry.php", 'SA_CUSTOMER', MENU_INQUIRY);
+				$app->add_lapp_function(1, _("Towns Covera&ge Map"),
+					"modules/knb_distribution/inquiry/towns_map.php", 'SA_CUSTOMER', MENU_INQUIRY);
 				break;
 		}
 	}
