@@ -779,3 +779,56 @@ div.note_msg {
 	div.tabs a { padding: 8px 10px; font-size: 12px; }
 	.login { width: 92vw; }
 }
+
+/* Persistent left sidebar (matches TechCloud's layout: a fixed navigation
+   column that stays visible while working inside a screen, instead of
+   FrontAccounting's default behaviour of only showing the menu on the
+   index page). See themes/knbgroup/renderer.php render_sidebar(). */
+.knb-sidebar {
+	width: 220px;
+	min-width: 220px;
+	vertical-align: top;
+	background: var(--knb-cream-soft);
+	border-right: 1px solid var(--knb-tan);
+	padding: 0;
+}
+.knb-content {
+	vertical-align: top;
+	padding: 0 0 0 14px;
+}
+.knb-sidebar-inner {
+	padding-bottom: 12px;
+}
+.knb-sidebar-heading {
+	background: var(--knb-green-dark);
+	color: #fff;
+	font-weight: 600;
+	font-size: 12px;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	padding: 8px 12px;
+	margin-top: 6px;
+}
+.knb-sidebar-items {
+	padding: 6px 4px;
+}
+.knb-sidebar-link {
+	padding: 4px 12px;
+	font-size: 13px;
+	line-height: 1.5;
+}
+.knb-sidebar-link a {
+	color: var(--knb-link);
+	text-decoration: none;
+}
+.knb-sidebar-link a:hover {
+	color: var(--knb-green-dark);
+	text-decoration: underline;
+}
+.knb-sidebar-link.inactive {
+	color: var(--knb-tan);
+}
+@media screen and (max-width: 900px) {
+	.knb-sidebar { display: none; }
+	.knb-content { padding-left: 0; }
+}

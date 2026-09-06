@@ -90,6 +90,23 @@
 			}
 			echo "</td></tr></table>";
 
+			// Persistent left sidebar (Transactions/Inquiries/Maintenance for
+			// the current app), matching TechCloud's layout - core's own
+			// menu_header only ever showed this list on the index page itself;
+			// on every other page it disappeared. Index page is left alone
+			// below since it already renders the same list full-width.
+			if (!$no_menu && !$is_index)
+			{
+				$sel_app = $_SESSION['sel_app'];
+				$current_app = isset($_SESSION['App']) ? $_SESSION['App']->get_application($sel_app) : null;
+				echo "<table width='100%' cellpadding='0' cellspacing='0'><tr>";
+				echo "<td class='knb-sidebar' valign='top'>";
+				if ($current_app)
+					$this->render_sidebar($current_app);
+				echo "</td>";
+				echo "<td class='knb-content' valign='top'>";
+			}
+
 			if ($no_menu)
 			{	// ajax indicator for installer and popups
 				echo "<center><table class='tablestyle_noborder'>"
@@ -110,6 +127,9 @@
 			global $version, $path_to_root, $Pagehelp, $Ajax, $SysPrefs;
 
 			include_once($path_to_root . "/includes/date_functions.inc");
+
+			if (!$no_menu && !$is_index)
+				echo "</td></tr></table>\n"; // closes 'knb-content' td + sidebar row/table
 
 			echo "</td></tr></table>\n"; // 'main_page'
 			if ($no_menu == false) // bottom status line
@@ -147,6 +167,40 @@
 				}
 				echo "</table><br><br>\n";
 			}
+		}
+
+		/*
+			Persistent left sidebar for the current app - same
+			modules/lappfunctions/rappfunctions data display_applications()
+			uses for the index-page menu, rendered as a single narrow column
+			of module sections instead of two wide columns, and shown on
+			every page (not just index.php).
+		*/
+		function render_sidebar($app)
+		{
+			if (!$_SESSION["wa_current_user"]->check_application_access($app))
+				return;
+
+			echo "<div class='knb-sidebar-inner'>";
+			foreach ($app->modules as $module)
+			{
+				if (!$_SESSION["wa_current_user"]->check_module_access($module))
+					continue;
+
+				echo "<div class='knb-sidebar-heading'>".$module->name."</div>";
+				echo "<div class='knb-sidebar-items'>";
+				foreach (array_merge($module->lappfunctions, $module->rappfunctions) as $appfunction)
+				{
+					if ($appfunction->label == "")
+						continue;
+					if ($_SESSION["wa_current_user"]->can_access_page($appfunction->access))
+						echo "<div class='knb-sidebar-link'>".menu_link($appfunction->link, $appfunction->label)."</div>\n";
+					elseif (!$_SESSION["wa_current_user"]->hide_inaccessible_menu_items())
+						echo "<div class='knb-sidebar-link inactive'>".access_string($appfunction->label, true)."</div>\n";
+				}
+				echo "</div>";
+			}
+			echo "</div>";
 		}
 
 		function display_applications(&$waapp)
