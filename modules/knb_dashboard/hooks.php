@@ -22,6 +22,10 @@ class hooks_knb_dashboard extends hooks
 				$app->add_lapp_function(1, _("&Sales Ops Dashboard"),
 					"modules/knb_dashboard/inquiry/sales_ops_dashboard.php", 'SA_SALESTRANSVIEW', MENU_INQUIRY);
 				break;
+			case 'GL':
+				$app->add_lapp_function(1, _("&Banking and Financial Dashboard"),
+					"modules/knb_dashboard/inquiry/banking_dashboard.php", 'SA_GLANALYTIC', MENU_INQUIRY);
+				break;
 		}
 	}
 }

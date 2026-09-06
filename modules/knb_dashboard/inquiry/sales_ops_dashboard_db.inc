@@ -102,6 +102,30 @@ function get_billing_summary()
 	return $s;
 }
 
+// Deliveries (ST_CUSTDELIVERY, type 13) - "pending" here means delivered
+// but not yet invoiced, the closest FA equivalent to TechCloud's "Delivery
+// Accept Pending" (FA has no separate delivery-acceptance workflow of its
+// own to mirror exactly).
+function get_delivery_summary()
+{
+	$s = array();
+	$s['total_deliveries'] = (int)db_fetch_row(db_query(
+		"SELECT COUNT(*) FROM ".TB_PREF."debtor_trans WHERE type=".ST_CUSTDELIVERY))[0];
+
+	$s['pending_deliveries'] = (int)db_fetch_row(db_query(
+		"SELECT COUNT(*) FROM ".TB_PREF."debtor_trans dt
+		 WHERE dt.type=".ST_CUSTDELIVERY." AND NOT EXISTS (
+		   SELECT 1 FROM ".TB_PREF."debtor_trans di
+		   WHERE di.type=".ST_SALESINVOICE." AND di.order_=dt.order_
+		 )"))[0];
+
+	$today = date2sql(Today());
+	$s['deliveries_today'] = (int)db_fetch_row(db_query(
+		"SELECT COUNT(*) FROM ".TB_PREF."debtor_trans WHERE type=".ST_CUSTDELIVERY." AND tran_date='$today'"))[0];
+
+	return $s;
+}
+
 // Reuses core's own per-item-per-location QOH function
 // (includes/db/inventory_db.inc) - reorder_level is set per (stock_id,
 // loc_code) in loc_stock, so the QOH check must be scoped to that same

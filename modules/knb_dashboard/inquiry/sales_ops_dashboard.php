@@ -66,6 +66,15 @@ kpi_card(number_format2($vol['ghee_volume'], 1), _('Ghee Secondary (In Ltrs)'));
 kpi_card(number_format2($vol['honey_volume'], 1), _('Honey Secondary (In Kgs)'));
 echo "</div>";
 
+// ---- Deliveries ----
+echo "<div class='knb-kpi-section-title'>"._("Deliveries")."</div>";
+$delv = get_delivery_summary();
+echo "<div class='knb-kpi-grid'>";
+kpi_card($delv['total_deliveries'], _('Total Deliveries'));
+kpi_card($delv['pending_deliveries'], _('Pending Deliveries'));
+kpi_card($delv['deliveries_today'], _("Today's Deliveries"));
+echo "</div>";
+
 // ---- Billing & Financial ----
 echo "<div class='knb-kpi-section-title'>"._("Billing & Financial")."</div>";
 $bill = get_billing_summary();
