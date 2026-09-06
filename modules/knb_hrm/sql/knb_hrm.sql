@@ -3,14 +3,14 @@ CREATE TABLE IF NOT EXISTS `0_hr_departments` (
   `name` varchar(60) NOT NULL,
   `inactive` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `0_hr_designations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL,
   `inactive` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `0_hr_employees` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -28,4 +28,4 @@ CREATE TABLE IF NOT EXISTS `0_hr_employees` (
   PRIMARY KEY (`id`),
   KEY `department_id` (`department_id`),
   KEY `designation_id` (`designation_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;

@@ -13,4 +13,4 @@ CREATE TABLE IF NOT EXISTS `0_bank_statement_lines` (
   PRIMARY KEY (`id`),
   KEY `bank_account_id` (`bank_account_id`),
   KEY `status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;

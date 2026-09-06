@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `0_hr_attendance` (
   `remarks` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `employee_date` (`employee_id`, `att_date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `0_hr_geo_tracking` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -20,4 +20,4 @@ CREATE TABLE IF NOT EXISTS `0_hr_geo_tracking` (
   `remarks` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `employee_id` (`employee_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;

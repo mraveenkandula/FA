@@ -30,4 +30,28 @@ $installed_extensions = array (
 		'active' => true,
 		'urank' => 3,
 	),
+	4 => array(
+		'name' => 'KNB Group Purchasing',
+		'package' => 'knb_purchasing',
+		'version' => '1.0',
+		'path' => 'modules/knb_purchasing',
+		'active' => true,
+		'urank' => 4,
+	),
+	5 => array(
+		'name' => 'KNB Group Inventory Extensions',
+		'package' => 'knb_inventory_ext',
+		'version' => '1.0',
+		'path' => 'modules/knb_inventory_ext',
+		'active' => true,
+		'urank' => 5,
+	),
+	6 => array(
+		'name' => 'KNB Group Production',
+		'package' => 'knb_production',
+		'version' => '1.0',
+		'path' => 'modules/knb_production',
+		'active' => true,
+		'urank' => 6,
+	),
 );
