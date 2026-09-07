@@ -398,7 +398,15 @@ foreach ($installed_extensions as $ext)
 ini_set('session.gc_maxlifetime', 36000); // moved from below.
 
 $Session_manager = new SessionManager();
-$Session_manager->sessionStart('FA'.md5(dirname(__FILE__)), 0, '/', null, SECURE_ONLY);
+// Not md5(dirname(__FILE__)) - this deploy pipeline atomically symlink-swaps
+// /opt/knb-erp/current to a brand-new timestamped release directory on every
+// deploy, and PHP resolves __FILE__ through that symlink to the real,
+// release-specific path (confirmed live: dirname(__FILE__) differs on every
+// release). That made the session cookie name change on every deploy,
+// silently invalidating every logged-in user's session. Hash the DB name
+// instead - stable across releases, still differentiates installs sharing a
+// domain the way the original dirname()-based name intended to.
+$Session_manager->sessionStart('FA'.md5($db_connections[$def_coy]['dbname']), 0, '/', null, SECURE_ONLY);
 
 $_SESSION['SysPrefs'] = new sys_prefs();
 
