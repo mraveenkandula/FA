@@ -90,9 +90,9 @@ while ($myrow = db_fetch($result))
 {
 	alt_table_row_color($k);
 	label_cell(htmlspecialchars(trim($myrow['first_name'].' '.$myrow['last_name']), ENT_QUOTES, 'UTF-8'));
-	label_cell($myrow["asset_name"]);
+	label_cell(htmlspecialchars($myrow["asset_name"], ENT_QUOTES, 'UTF-8'));
 	label_cell(sql2date($myrow["allocation_date"]));
-	label_cell($myrow["remarks"]);
+	label_cell(htmlspecialchars($myrow["remarks"], ENT_QUOTES, 'UTF-8'));
 	inactive_control_cell($myrow["id"], $myrow["inactive"], 'knb_asset_allocations', 'id');
 	edit_button_cell("Edit".$myrow['id'], _("Edit"));
 	delete_button_cell("Delete".$myrow['id'], _("Delete"));

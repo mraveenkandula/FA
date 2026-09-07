@@ -69,8 +69,8 @@ $k = 0;
 while ($myrow = db_fetch($result))
 {
 	alt_table_row_color($k);
-	label_cell($myrow["code"]);
-	label_cell($myrow["name"]);
+	label_cell(htmlspecialchars($myrow["code"], ENT_QUOTES, 'UTF-8'));
+	label_cell(htmlspecialchars($myrow["name"], ENT_QUOTES, 'UTF-8'));
 	inactive_control_cell($myrow["id"], $myrow["inactive"], 'knb_shift_types', 'id');
 	edit_button_cell("Edit".$myrow['id'], _("Edit"));
 	delete_button_cell("Delete".$myrow['id'], _("Delete"));
