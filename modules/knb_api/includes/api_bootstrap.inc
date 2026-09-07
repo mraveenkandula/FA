@@ -68,6 +68,16 @@ include_once($path_to_root . '/includes/types.inc');
 include_once($path_to_root . '/includes/date_functions.inc');
 include_once($path_to_root . '/includes/db/sql_functions.inc');
 
+// date2sql()/sql2date() (used internally by some of the knb_* db.inc
+// functions we wrap, e.g. add_leave_entry()) call user_date_format()/
+// user_date_sep(), which live in current_user.inc and aren't pulled in by
+// anything above. Those two functions degrade gracefully with no session
+// (verified: they fall back to $SysPrefs->dflt_date_fmt/dflt_date_sep when
+// $_SESSION['wa_current_user'] isn't set, which is always true here since
+// this bootstrap never starts a session) - safe to include for that reason
+// alone, not for anything else in this large file.
+include_once($path_to_root . '/includes/current_user.inc');
+
 // db_query()'s own error path (check_db_error(), normally in
 // includes/errors.inc) renders an HTML error box and calls end_page() -
 // neither makes sense for a JSON API, so this replaces it with a plain
@@ -107,6 +117,46 @@ function api_input()
 	$raw = file_get_contents('php://input');
 	$data = json_decode($raw, true);
 	return is_array($data) ? $data : array();
+}
+
+/*
+	Every API endpoint takes/returns dates as plain ISO "YYYY-MM-DD" - the
+	sane default for a JSON API, and already what MySQL/db_escape() expects
+	directly. Most of the knb_* db.inc functions we wrap match this (their
+	callers, the web pages, pre-convert with date2sql() before calling), so
+	no conversion is needed for those.
+
+	The one exception found while wrapping this feature set is
+	add_leave_entry() (modules/knb_hrm/manage/leave_entry_db.inc), which
+	calls date2sql() ITSELF on leave_from/leave_to - meaning it expects a
+	date already in the install's configured display format (verified
+	locally: this install's $SysPrefs->dflt_date_fmt/dflt_date_sep is 0/0,
+	i.e. MM/DD/YYYY), not ISO. This converts ISO -> that display format so
+	add_leave_entry()'s internal date2sql() round-trips correctly, without
+	modifying leave_entry_db.inc itself (out of scope for this module).
+*/
+function api_date_to_display($iso_date)
+{
+	global $SysPrefs, $tmonths;
+
+	if ($iso_date === null || $iso_date === '')
+		return '';
+	if (!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $iso_date, $m))
+		api_error("Invalid date '$iso_date' - expected YYYY-MM-DD");
+	list(, $year, $month, $day) = $m;
+
+	$how = user_date_format();
+	$sep = $SysPrefs->dateseps[user_date_sep()];
+	$month_disp = $month;
+	if ($how > 2 && !empty($tmonths))
+		$month_disp = $tmonths[(int)$month];
+
+	if ($how == 0 || $how == 3) // MMDDYYYY
+		return $month_disp.$sep.$day.$sep.$year;
+	elseif ($how == 1 || $how == 4) // DDMMYYYY
+		return $day.$sep.$month_disp.$sep.$year;
+	else // YYYYMMDD
+		return $year.$sep.$month_disp.$sep.$day;
 }
 
 /*
