@@ -24,6 +24,7 @@ class hooks_knb_hrm extends hooks
 			'knb_hrm_leave.sql' => array('knb_leave_types', 'id', 'ANY'),
 			'knb_hrm_payroll.sql' => array('knb_payroll', 'id', 'ANY'),
 			'knb_hrm_letters.sql' => array('knb_letter_templates', 'id', 'ANY'),
+			'knb_hrm_tasks.sql' => array('knb_employee_tasks', 'id', 'ANY'),
 		);
 		return $this->update_databases(-1, $updates, $check_only);
 	}
@@ -43,6 +44,10 @@ class hooks_knb_hrm extends hooks
 		// department/designation/leave-type maintenance elsewhere in this
 		// module.
 		$security_areas['SA_KNB_LETTER_MANAGE'] = array(1<<8|4, _("Manage HR letter templates and generate employee letters"));
+		// Assigning a task to (potentially any) employee is a supervisory
+		// action, unlike updating the status of a task already assigned to
+		// you - that stays SA_OPEN, matching how leave/expense entry work.
+		$security_areas['SA_KNB_TASK_ASSIGN'] = array(1<<8|5, _("Assign tasks to employees"));
 		$security_sections = array(1<<8 => _("KNB Group HRM"));
 		return array($security_areas, $security_sections);
 	}
@@ -67,6 +72,10 @@ class knb_hrm_app extends application
 			"modules/knb_hrm/manage/leave_entry.php", 'SA_OPEN', MENU_TRANSACTION);
 		$this->add_lapp_function(0, _("Leave A&pproval"),
 			"modules/knb_hrm/manage/leave_approval.php", 'SA_KNB_LEAVE_APPROVE', MENU_TRANSACTION);
+		$this->add_lapp_function(0, _("Assign &Task"),
+			"modules/knb_hrm/manage/task_entry.php", 'SA_KNB_TASK_ASSIGN', MENU_TRANSACTION);
+		$this->add_lapp_function(0, _("&My Tasks"),
+			"modules/knb_hrm/manage/task_update.php", 'SA_OPEN', MENU_TRANSACTION);
 
 		$this->add_module(_("Inquiries and Reports"));
 		$this->add_lapp_function(1, _("&Attendance Inquiry"),
@@ -81,6 +90,8 @@ class knb_hrm_app extends application
 			"modules/knb_hrm/inquiry/hr_records_inquiry.php", 'SA_KNB_PAYROLL_VIEW', MENU_INQUIRY);
 		$this->add_lapp_function(1, _("&Generate Letter"),
 			"modules/knb_hrm/inquiry/generate_letter.php", 'SA_KNB_LETTER_MANAGE', MENU_INQUIRY);
+		$this->add_lapp_function(1, _("&Task Management Inquiry"),
+			"modules/knb_hrm/inquiry/task_inquiry.php", 'SA_OPEN', MENU_INQUIRY);
 
 		$this->add_module(_("Maintenance"));
 		$this->add_lapp_function(2, _("&Departments"),
