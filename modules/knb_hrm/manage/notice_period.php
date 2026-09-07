@@ -75,6 +75,7 @@ if ($Mode == 'RESET')
 
 $result = get_all_notice_periods();
 
+start_form();
 start_table(TABLESTYLE, "width='70%'");
 $th = array(_('Employee'), _('Notice Days'), _('Start Date'), _('End Date'), '', '');
 table_header($th);
@@ -92,7 +93,6 @@ while ($myrow = db_fetch($result))
 }
 end_table();
 
-start_form();
 start_table(TABLESTYLE2);
 
 if ($selected_id != -1)

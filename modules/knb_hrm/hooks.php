@@ -38,6 +38,12 @@ class hooks_knb_hrm extends hooks
 		// account numbers - SA_OPEN (any logged-in user) is fine for
 		// attendance/leave but not for this, so it gets its own area.
 		$security_areas['SA_KNB_PAYROLL_VIEW'] = array(1<<8|3, _("View payroll and HR records (salary, PAN/Aadhaar, bank details)"));
+		// Distinct from SA_KNB_PAYROLL_VIEW above: that area is read-only
+		// (the inquiry pages), this one gates add/edit/delete on the
+		// salary-sensitive maintenance pages (Employee Loans, Professional
+		// Tax Slabs) - a user who can view payroll data shouldn't
+		// automatically also be able to change it.
+		$security_areas['SA_KNB_PAYROLL_MANAGE'] = array(1<<8|6, _("Add, edit or delete payroll-related records (loans, professional tax slabs)"));
 		// Letter templates are official company correspondence (offer/
 		// experience/appointment letters) and Generate Letter produces a
 		// signed-looking document for an arbitrary employee - SA_OPEN
@@ -114,9 +120,9 @@ class knb_hrm_app extends application
 		$this->add_lapp_function(2, _("&Notice Periods"),
 			"modules/knb_hrm/manage/notice_period.php", 'SA_OPEN', MENU_MAINTENANCE);
 		$this->add_lapp_function(2, _("Employee &Loans"),
-			"modules/knb_hrm/manage/employee_loan.php", 'SA_KNB_PAYROLL_VIEW', MENU_MAINTENANCE);
+			"modules/knb_hrm/manage/employee_loan.php", 'SA_KNB_PAYROLL_MANAGE', MENU_MAINTENANCE);
 		$this->add_lapp_function(2, _("&Professional Tax Slabs"),
-			"modules/knb_hrm/manage/professional_tax.php", 'SA_KNB_PAYROLL_VIEW', MENU_MAINTENANCE);
+			"modules/knb_hrm/manage/professional_tax.php", 'SA_KNB_PAYROLL_MANAGE', MENU_MAINTENANCE);
 
 		$this->add_extensions();
 	}

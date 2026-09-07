@@ -1,5 +1,5 @@
 <?php
-$page_security = 'SA_KNB_PAYROLL_VIEW';
+$page_security = 'SA_KNB_PAYROLL_MANAGE';
 $path_to_root = "../../..";
 include_once($path_to_root . "/includes/session.inc");
 
