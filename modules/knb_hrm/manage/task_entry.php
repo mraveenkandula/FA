@@ -34,9 +34,20 @@ function can_process()
 	return true;
 }
 
+// assigned_by is deliberately NOT a form field here. This module has no
+// link between an FA web login (0_users) and an hr_employees record -
+// employees authenticate to the mobile app via their own separate
+// mobile_username/mobile_password_hash, not the web session this page
+// runs under - so there is no identity to verify a submitted "assigned
+// by" value against, and a free-choice dropdown for it would just be a
+// spoofable audit field. Every other action in this module (leave
+// entry, expense claims) follows the same convention: who's acting is
+// implicit from having access to the page, not a value the client
+// asserts. The column stays nullable for a future pass if a real
+// user<->employee link gets added.
 if (isset($_POST['AssignTask']) && can_process() && check_csrf_token())
 {
-	add_task($_POST['assigned_to'], @$_POST['assigned_by'] ?: null,
+	add_task($_POST['assigned_to'], null,
 		$_POST['title'], $_POST['description'], $_POST['due_date'], $_POST['priority']);
 	display_notification(_('Task assigned.'));
 	unset($_POST);
@@ -47,7 +58,6 @@ if (!isset($_POST['priority']))
 
 start_form();
 start_table(TABLESTYLE2);
-array_selector_row(_("Assigned By").':', 'assigned_by', @$_POST['assigned_by'], employee_list());
 array_selector_row(_("Assign To").':', 'assigned_to', @$_POST['assigned_to'], employee_list());
 text_row(_("Title").':', 'title', @$_POST['title'], 50, 200);
 textarea_row(_("Description").':', 'description', null, 40, 3);

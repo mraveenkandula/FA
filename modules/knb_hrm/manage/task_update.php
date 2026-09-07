@@ -3,7 +3,16 @@ $page_security = 'SA_OPEN';
 $path_to_root = "../../..";
 include_once($path_to_root . "/includes/session.inc");
 
-page(_($help_context = "My Tasks"));
+// Named "Update Task Status", not "My Tasks" - this page runs under a
+// shared/office-staff FA web login, not a per-employee session (see the
+// comment in task_entry.php: hr_employees has no link to 0_users, and
+// employees authenticate to the mobile app separately). Selecting which
+// employee's tasks to update here follows the exact same convention as
+// leave_entry.php/expense_claim_entry.php elsewhere in this module -
+// identity is asserted by page access (SA_OPEN, i.e. any FA login), not
+// verified against a logged-in employee, because there is no such
+// employee-level web session to verify against.
+page(_($help_context = "Update Task Status"));
 
 include_once($path_to_root . "/includes/ui.inc");
 include_once(__DIR__ . "/task_entry_db.inc");
@@ -41,7 +50,7 @@ if (!empty($_POST['employee_id']))
 	}
 
 	div_start('tasks');
-	display_heading(_("My Tasks"));
+	display_heading(_("Tasks"));
 	$result = get_tasks($_POST['employee_id']);
 	start_table(TABLESTYLE, "width='95%'");
 	$th = array(_('Title'), _('Description'), _('Due Date'), _('Priority'), _('Assigned By'), _('Status'), _('Remarks'), '');

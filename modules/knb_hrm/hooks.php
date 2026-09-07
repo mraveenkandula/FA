@@ -25,6 +25,7 @@ class hooks_knb_hrm extends hooks
 			'knb_hrm_payroll.sql' => array('knb_payroll', 'id', 'ANY'),
 			'knb_hrm_letters.sql' => array('knb_letter_templates', 'id', 'ANY'),
 			'knb_hrm_tasks.sql' => array('knb_employee_tasks', 'id', 'ANY'),
+			'knb_hrm_holidays_shifts_assets.sql' => array('knb_shift_types', 'id', 'ANY'),
 		);
 		return $this->update_databases(-1, $updates, $check_only);
 	}
@@ -74,7 +75,7 @@ class knb_hrm_app extends application
 			"modules/knb_hrm/manage/leave_approval.php", 'SA_KNB_LEAVE_APPROVE', MENU_TRANSACTION);
 		$this->add_lapp_function(0, _("Assign &Task"),
 			"modules/knb_hrm/manage/task_entry.php", 'SA_KNB_TASK_ASSIGN', MENU_TRANSACTION);
-		$this->add_lapp_function(0, _("&My Tasks"),
+		$this->add_lapp_function(0, _("&Update Task Status"),
 			"modules/knb_hrm/manage/task_update.php", 'SA_OPEN', MENU_TRANSACTION);
 
 		$this->add_module(_("Inquiries and Reports"));
@@ -104,6 +105,12 @@ class knb_hrm_app extends application
 			"modules/knb_hrm/manage/leave_types.php", 'SA_OPEN', MENU_MAINTENANCE);
 		$this->add_lapp_function(2, _("Letter &Templates"),
 			"modules/knb_hrm/manage/letter_templates.php", 'SA_KNB_LETTER_MANAGE', MENU_MAINTENANCE);
+		$this->add_lapp_function(2, _("&Holidays"),
+			"modules/knb_hrm/manage/holidays.php", 'SA_OPEN', MENU_MAINTENANCE);
+		$this->add_lapp_function(2, _("&Shift Types"),
+			"modules/knb_hrm/manage/shift_types.php", 'SA_OPEN', MENU_MAINTENANCE);
+		$this->add_lapp_function(2, _("&Asset Allocations"),
+			"modules/knb_hrm/manage/asset_allocation.php", 'SA_OPEN', MENU_MAINTENANCE);
 
 		$this->add_extensions();
 	}
