@@ -111,6 +111,12 @@ class knb_hrm_app extends application
 			"modules/knb_hrm/manage/shift_types.php", 'SA_OPEN', MENU_MAINTENANCE);
 		$this->add_lapp_function(2, _("&Asset Allocations"),
 			"modules/knb_hrm/manage/asset_allocation.php", 'SA_OPEN', MENU_MAINTENANCE);
+		$this->add_lapp_function(2, _("&Notice Periods"),
+			"modules/knb_hrm/manage/notice_period.php", 'SA_OPEN', MENU_MAINTENANCE);
+		$this->add_lapp_function(2, _("Employee &Loans"),
+			"modules/knb_hrm/manage/employee_loan.php", 'SA_KNB_PAYROLL_VIEW', MENU_MAINTENANCE);
+		$this->add_lapp_function(2, _("&Professional Tax Slabs"),
+			"modules/knb_hrm/manage/professional_tax.php", 'SA_KNB_PAYROLL_VIEW', MENU_MAINTENANCE);
 
 		$this->add_extensions();
 	}
