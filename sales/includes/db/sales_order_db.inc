@@ -324,7 +324,6 @@ function read_sales_order($order_no, &$order, $trans_type)
 	  $myrow["delivery_address"], $myrow["freight_cost"]);
 
 	$order->cust_ref = $myrow["customer_ref"];
-	$order->sales_type =$myrow["order_type"];
 	$order->reference = $myrow["reference"];
 	$order->Comments = $myrow["comments"];
 	$order->due_date = sql2date($myrow["delivery_date"]);
