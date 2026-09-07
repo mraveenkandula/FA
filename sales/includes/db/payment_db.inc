@@ -166,3 +166,38 @@ function get_cust_bank_charge($type, $trans_no)
 	return $myrow['0'];
 }
 
+//------------------------------------------------------------------------------------------------
+/*
+	Added for TechCloud parity (Banking and General Ledger > Customer Payments Inquiry).
+	Read-only listing of customer payment transactions (ST_CUSTPAYMENT rows written by
+	write_customer_payment() above) across all customers, independent of allocation status.
+	No new tables - plain SELECT against the existing debtor_trans/debtors_master/audit_trail/
+	voided core tables.
+*/
+function get_customer_payments_for_inquiry($ref, $from, $to, $show_voided=false)
+{
+	$sql = "SELECT trans.type, trans.trans_no, trans.reference, trans.tran_date,
+			debtor.name AS counterparty, debtor.debtor_no,
+			(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount) AS amount,
+			user.user_id AS entered_by
+		FROM ".TB_PREF."debtor_trans trans
+		JOIN ".TB_PREF."debtors_master debtor ON debtor.debtor_no = trans.debtor_no
+		LEFT JOIN ".TB_PREF."voided v ON v.type = trans.type AND v.id = trans.trans_no
+		LEFT JOIN ".TB_PREF."audit_trail audit ON audit.type = trans.type AND audit.trans_no = trans.trans_no
+		LEFT JOIN ".TB_PREF."users user ON user.id = audit.user
+		WHERE trans.type = ".ST_CUSTPAYMENT;
+
+	if (!$show_voided)
+		$sql .= " AND ISNULL(v.date_)";
+	if ($from)
+		$sql .= " AND trans.tran_date >= '".date2sql($from)."'";
+	if ($to)
+		$sql .= " AND trans.tran_date <= '".date2sql($to)."'";
+	if ($ref)
+		$sql .= " AND trans.reference LIKE ".db_escape("%$ref%");
+
+	$sql .= " GROUP BY trans.type, trans.trans_no ORDER BY trans.tran_date DESC, trans.trans_no DESC";
+
+	return db_query($sql, "could not retrieve customer payments for inquiry");
+}
+

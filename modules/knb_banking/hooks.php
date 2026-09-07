@@ -22,6 +22,14 @@ class hooks_knb_banking extends hooks
 					"modules/knb_banking/inquiry/statement_lines.php", 'SA_OPEN', MENU_INQUIRY);
 				$app->add_rapp_function(1, _("&GST Summary Report"),
 					"modules/knb_banking/inquiry/gst_summary_report.php", 'SA_GLANALYTIC', MENU_INQUIRY);
+				// TechCloud parity (see docs/techcloud-parity-gap-analysis.md): these two
+				// read-only inquiries live physically under gl/inquiry and purchasing/inquiry
+				// (matching TechCloud's own paths) but are registered here, the same way the
+				// other knb_banking inquiries above inject into the core GL tab.
+				$app->add_rapp_function(1, _("Customer &Payments Inquiry"),
+					"gl/inquiry/customer_payments_inquiry.php", 'SA_OPEN', MENU_INQUIRY);
+				$app->add_rapp_function(1, _("Supplier Pa&yments Inquiry"),
+					"purchasing/inquiry/supp_payment_inq.php", 'SA_OPEN', MENU_INQUIRY);
 				break;
 		}
 	}

@@ -109,4 +109,35 @@ function void_supp_payment($type, $type_no)
 	commit_transaction();
 }
 
+//------------------------------------------------------------------------------------------------
+/*
+	Added for TechCloud parity (Banking and General Ledger > Supplier Payments Inquiry).
+	Read-only listing of payments made to suppliers, across both posting paths already used
+	in this fork's data: structured payments via write_supp_payment() above (ST_SUPPAYMENT)
+	and direct bank payments made against a supplier from gl/gl_bank.php (ST_BANKPAYMENT).
+	Mirrors the filter='3' branch of core's own get_sql_for_supplier_inquiry() in
+	supp_trans_db.inc, just narrowed to payments only and simplified for a dedicated page.
+	No new tables - plain SELECT against the existing supp_trans/suppliers tables.
+*/
+function get_supplier_payments_for_inquiry($supplier_id, $from, $to)
+{
+	$sql = "SELECT trans.type, trans.trans_no, trans.reference, trans.supp_reference,
+			trans.tran_date, trans.due_date, supplier.supp_name, supplier.curr_code,
+			(trans.ov_amount + trans.ov_gst + trans.ov_discount) AS amount
+		FROM ".TB_PREF."supp_trans trans
+		JOIN ".TB_PREF."suppliers supplier ON supplier.supplier_id = trans.supplier_id
+		WHERE (trans.type = ".ST_SUPPAYMENT." OR trans.type = ".ST_BANKPAYMENT.")
+			AND trans.ov_amount != 0";
+
+	if ($supplier_id && $supplier_id != ALL_TEXT)
+		$sql .= " AND trans.supplier_id = ".db_escape($supplier_id);
+	if ($from)
+		$sql .= " AND trans.tran_date >= '".date2sql($from)."'";
+	if ($to)
+		$sql .= " AND trans.tran_date <= '".date2sql($to)."'";
+
+	$sql .= " ORDER BY trans.tran_date DESC, trans.trans_no DESC";
+
+	return db_query($sql, "could not retrieve supplier payments for inquiry");
+}
 
