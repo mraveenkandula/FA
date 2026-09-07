@@ -20,6 +20,8 @@ class hooks_knb_schemes extends hooks
 			case 'orders':
 				$app->add_lapp_function(0, _("Sch&emes Entry"),
 					"modules/knb_schemes/manage/schemes.php", 'SA_CUSTOMER', MENU_TRANSACTION);
+				$app->add_lapp_function(0, _("Schemes &Note"),
+					"modules/knb_schemes/manage/scheme_note.php", 'SA_CUSTOMER', MENU_TRANSACTION);
 
 				$app->add_lapp_function(1, _("Schemes In&quiry"),
 					"modules/knb_schemes/inquiry/schemes_inquiry.php", 'SA_CUSTOMER', MENU_INQUIRY);
@@ -34,6 +36,7 @@ class hooks_knb_schemes extends hooks
 		$updates = array(
 			'knb_schemes.sql' => array('knb_schemes', 'id', 'ANY'),
 			'knb_schemes_promotion_types.sql' => array('knb_schemes', 'promotion_type', 'ANY'),
+			'knb_scheme_notes.sql' => array('knb_scheme_notes', 'id', 'ANY'),
 		);
 		return $this->update_databases(-1, $updates, $check_only);
 	}
