@@ -34,7 +34,7 @@ check_db_has_costable_items(_("There are no inventory items defined in the syste
 if (isset($_GET['stock_id']))
 	$_POST['stock_id'] = $_GET['stock_id'];
 
-if (list_updated('stock_id')) 
+if (list_updated('stock_id') || list_updated('loc_code'))
 {
 	$Ajax->activate('show_heading');
 	$Ajax->activate('reorders');
@@ -49,10 +49,15 @@ start_form(false, false, $action);
 if (!isset($_POST['stock_id']))
 	$_POST['stock_id'] = get_global_stock_item();
 
+if (!isset($_POST['loc_code']))
+	$_POST['loc_code'] = ALL_TEXT;
+
 if (!$page_nested)
 {
 	echo "<center>" . _("Item:"). "&nbsp;";
 	echo stock_costable_items_list('stock_id', $_POST['stock_id'], false, true);
+	echo "&nbsp;&nbsp;" . _("Location:"). "&nbsp;";
+	echo locations_list('loc_code', $_POST['loc_code'], true, true);
 
 	echo "<hr></center>";
 }
@@ -74,7 +79,7 @@ table_header($th);
 $j = 1;
 $k=0; //row colour counter
 
-$result = get_loc_details($_POST['stock_id']);
+$result = get_loc_details($_POST['stock_id'], 0, $_POST['loc_code']);
 
 while ($myrow = db_fetch($result))
 {

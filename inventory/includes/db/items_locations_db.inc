@@ -83,15 +83,21 @@ function set_reorder_level($stock_id, $loc_code, $reorder_level)
 
 //------------------------------------------------------------------------------------
 
-function get_loc_details($stock_id, $fixed_asset = 0)
+function get_loc_details($stock_id, $fixed_asset = 0, $loc_code = null)
 {
 	$sql = "SELECT stock.loc_code, stock.location_name, "
 	.db_escape($stock_id)." as stock_id, reorders.reorder_level
 		FROM ".TB_PREF."locations stock LEFT JOIN ".TB_PREF."loc_stock reorders ON
 		reorders.loc_code=stock.loc_code
 		AND reorders.stock_id = ".db_escape($stock_id)
-	    ." WHERE stock.fixed_asset = ".db_escape($fixed_asset)
-		." ORDER BY reorders.loc_code";
+	    ." WHERE stock.fixed_asset = ".db_escape($fixed_asset);
+	// Optional location filter (reorder_level.php's "Location:" combo) -
+	// without it every location for this item is returned, same as before
+	// this parameter existed; stock_status.php's own call is unaffected,
+	// it never passes this argument.
+	if ($loc_code !== null && $loc_code !== ALL_TEXT)
+		$sql .= " AND stock.loc_code = ".db_escape($loc_code);
+	$sql .= " ORDER BY reorders.loc_code";
 	return db_query($sql,"an item reorder could not be retreived");
 }
 
