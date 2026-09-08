@@ -110,3 +110,22 @@ function get_outlet_photos($debtor_no)
 		ORDER BY p.uploaded_date DESC";
 	return db_query($sql, "could not get outlet photos");
 }
+
+/*
+	Single outlet's stored GPS (gps_lat/gps_lng from customer_distribution,
+	set by create_outlet() above when the outlet was registered - NULL for
+	outlets created before that field existed, or ones added directly in
+	core FA rather than via the New Outlet screen). Used by
+	outlet_location_get.php to back the mobile app's order-time
+	"near/far from outlet" proximity check - see that endpoint's doc
+	comment for why this is a read-only lookup, not a new table.
+*/
+function get_outlet_location($debtor_no)
+{
+	$sql = "SELECT d.debtor_no, d.name, cd.gps_lat, cd.gps_lng
+		FROM ".TB_PREF."debtors_master d
+		LEFT JOIN ".TB_PREF."customer_distribution cd ON cd.debtor_no = d.debtor_no
+		WHERE d.debtor_no = ".db_escape($debtor_no);
+	$result = db_query($sql, "could not look up outlet location");
+	return db_fetch_assoc($result);
+}
