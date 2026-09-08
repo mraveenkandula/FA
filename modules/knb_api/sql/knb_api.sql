@@ -40,3 +40,38 @@ CREATE TABLE IF NOT EXISTS `0_knb_outlet_photos` (
   PRIMARY KEY (`id`),
   KEY `debtor_no` (`debtor_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- Camera/media cluster (closing the Salesmatic marketing-sheet gap):
+-- selfie-validated attendance, the outlet photo pipeline above finally
+-- wired up to an endpoint, and lightweight competitor-activity capture.
+-- These CREATE TABLE statements are here for documentation only - the
+-- self-healing CREATE TABLE IF NOT EXISTS calls inside
+-- modules/knb_api/includes/attendance_selfie_db.inc and
+-- competitor_note_db.inc (called defensively from their write/read paths)
+-- are what actually apply them in production, same as knb_price_import_log
+-- above and 0_knb_outlet_photos itself.
+
+CREATE TABLE IF NOT EXISTS `0_knb_attendance_selfies` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `employee_id` int(11) NOT NULL,
+  `att_date` date NOT NULL,
+  `punch_action` varchar(10) NOT NULL,
+  `file_path` varchar(255) NOT NULL,
+  `uploaded_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `employee_id` (`employee_id`),
+  KEY `att_date` (`att_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `0_knb_competitor_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `employee_id` int(11) NOT NULL,
+  `debtor_no` int(11) DEFAULT NULL,
+  `competitor_name` varchar(100) NOT NULL,
+  `note` text,
+  `file_path` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `employee_id` (`employee_id`),
+  KEY `debtor_no` (`debtor_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;

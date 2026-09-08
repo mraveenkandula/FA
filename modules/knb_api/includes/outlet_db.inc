@@ -94,3 +94,19 @@ function add_outlet_photo($debtor_no, $photo_type, $file_path, $employee_id)
 		"could not save outlet photo");
 	return db_insert_id();
 }
+
+/*
+	Photo history for one outlet - newest first. Joins hr_employees the same
+	way get_all_verifications() does for stock_verification_get.php, so the
+	API can return an uploader name without a second round trip per row.
+*/
+function get_outlet_photos($debtor_no)
+{
+	$sql = "SELECT p.id, p.debtor_no, p.photo_type, p.file_path, p.uploaded_by_employee_id,
+			p.uploaded_date, e.first_name, e.last_name
+		FROM ".TB_PREF."knb_outlet_photos p
+		LEFT JOIN ".TB_PREF."hr_employees e ON e.id = p.uploaded_by_employee_id
+		WHERE p.debtor_no=".db_escape($debtor_no)."
+		ORDER BY p.uploaded_date DESC";
+	return db_query($sql, "could not get outlet photos");
+}
