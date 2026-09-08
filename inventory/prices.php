@@ -82,6 +82,12 @@ if ($Mode=='ADD_ITEM' || $Mode=='UPDATE_ITEM')
 		display_error( _("The price entered must be numeric."));
 		set_focus('price');
 	}
+	elseif (get_post('pieces_price') !== '' && !check_num('pieces_price', 0))
+	{
+		$input_error = 1;
+		display_error( _("The piece price entered must be numeric."));
+		set_focus('pieces_price');
+	}
    	elseif ($Mode == 'ADD_ITEM' && get_stock_price_type_currency($_POST['stock_id'], $_POST['sales_type_id'], $_POST['curr_abrev']))
    	{
       	$input_error = 1;
@@ -91,12 +97,13 @@ if ($Mode=='ADD_ITEM' || $Mode=='UPDATE_ITEM')
 
 	if ($input_error != 1)
 	{
+		$pieces_price = get_post('pieces_price') === '' ? 0 : input_num('pieces_price');
 
-    	if ($selected_id != -1) 
+    	if ($selected_id != -1)
 		{
 			//editing an existing price
 			update_item_price($selected_id, $_POST['sales_type_id'],
-			$_POST['curr_abrev'], input_num('price'));
+			$_POST['curr_abrev'], input_num('price'), $pieces_price);
 
 			$msg = _("This price has been updated.");
 		}
@@ -104,7 +111,7 @@ if ($Mode=='ADD_ITEM' || $Mode=='UPDATE_ITEM')
 		{
 
 			add_item_price($_POST['stock_id'], $_POST['sales_type_id'],
-			    $_POST['curr_abrev'], input_num('price'));
+			    $_POST['curr_abrev'], input_num('price'), $pieces_price);
 
 			$msg = _("The new price has been added.");
 		}
@@ -138,6 +145,7 @@ if (list_updated('stock_id') || isset($_POST['_curr_abrev_update']) || isset($_P
 	// display default calculated price for new settings. 
 	// If we have this price already in db it is overwritten later.
 	unset($_POST['price']);
+	unset($_POST['pieces_price']);
 	$Ajax->activate('price_details');
 }
 
@@ -148,7 +156,7 @@ $prices_list = get_prices($_POST['stock_id']);
 div_start('price_table');
 start_table(TABLESTYLE, "width='30%'");
 
-$th = array(_("Currency"), _("Sales Type"), _("Price"), "", "");
+$th = array(_("Currency"), _("Sales Type"), _("Price"), _("Piece Price"), "", "");
 table_header($th);
 $k = 0; //row colour counter
 $calculated = false;
@@ -160,6 +168,7 @@ while ($myrow = db_fetch($prices_list))
 	label_cell($myrow["curr_abrev"]);
     label_cell($myrow["sales_type"]);
     amount_cell($myrow["price"]);
+    amount_cell($myrow["pieces_price"] != 0 ? $myrow["pieces_price"] : '');
  	edit_button_cell("Edit".$myrow['id'], _("Edit"));
  	delete_button_cell("Delete".$myrow['id'], _("Delete"));
     end_row();
@@ -183,6 +192,7 @@ if ($Mode == 'Edit')
 	$_POST['curr_abrev'] = $myrow["curr_abrev"];
 	$_POST['sales_type_id'] = $myrow["sales_type_id"];
 	$_POST['price'] = price_format($myrow["price"]);
+	$_POST['pieces_price'] = $myrow["pieces_price"] != 0 ? price_format($myrow["pieces_price"]) : '';
 }
 
 hidden('selected_id', $selected_id);
@@ -202,6 +212,10 @@ if (!isset($_POST['price'])) {
 $kit = get_item_code_dflts($_POST['stock_id']);
 $units = $kit ? $kit["units"] : '';
 small_amount_row(_("Price:"), 'price', null, '', _('per') .' '.$units);
+
+if (!isset($_POST['pieces_price']))
+	$_POST['pieces_price'] = '';
+small_amount_row(_("Piece Price:"), 'pieces_price', null, '', _("optional - per single piece, when this item is also sold individually rather than by the case/box"));
 
 end_table(1);
 if ($calculated)

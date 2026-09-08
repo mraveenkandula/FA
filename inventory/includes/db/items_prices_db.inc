@@ -9,20 +9,28 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
     See the License here <http://www.gnu.org/licenses/gpl-3.0.html>.
 ***********************************************************************/
-function add_item_price($stock_id, $sales_type_id, $curr_abrev, $price)
+function add_item_price($stock_id, $sales_type_id, $curr_abrev, $price, $pieces_price=0)
 {
-	$sql = "INSERT INTO ".TB_PREF."prices (stock_id, sales_type_id, curr_abrev, price) 
+	$sql = "INSERT INTO ".TB_PREF."prices (stock_id, sales_type_id, curr_abrev, price, pieces_price)
 		VALUES (".db_escape($stock_id).", ".db_escape($sales_type_id)
-		.", ".db_escape($curr_abrev).", ".db_escape($price).")";
+		.", ".db_escape($curr_abrev).", ".db_escape($price).", ".db_escape($pieces_price).")";
 
 	db_query($sql,"an item price could not be added");
 }
 
-function update_item_price($price_id, $sales_type_id, $curr_abrev, $price)
+// $pieces_price=null (the default) leaves the existing pieces_price value
+// untouched - important because this function is also called by
+// modules/knb_inventory_ext/manage/price_import_db.inc's bulk CSV import,
+// which only ever updates the box/case price and must not silently zero out
+// a real per-piece price that was set separately via this page.
+function update_item_price($price_id, $sales_type_id, $curr_abrev, $price, $pieces_price=null)
 {
-	$sql = "UPDATE ".TB_PREF."prices SET sales_type_id=".db_escape($sales_type_id).", 
-		curr_abrev=".db_escape($curr_abrev).", 
-		price=".db_escape($price)." WHERE id=".db_escape($price_id);
+	$sql = "UPDATE ".TB_PREF."prices SET sales_type_id=".db_escape($sales_type_id).",
+		curr_abrev=".db_escape($curr_abrev).",
+		price=".db_escape($price);
+	if ($pieces_price !== null)
+		$sql .= ", pieces_price=".db_escape($pieces_price);
+	$sql .= " WHERE id=".db_escape($price_id);
 
 	db_query($sql,"an item price could not be updated");
 }

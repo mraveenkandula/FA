@@ -205,6 +205,7 @@ function clear_data()
 	unset($_POST['depreciation_rate']);
 	unset($_POST['depreciation_factor']);
 	unset($_POST['depreciation_start']);
+	unset($_POST['expiry_date']);
 }
 
 //------------------------------------------------------------------------------------
@@ -278,6 +279,8 @@ if (isset($_POST['addupdate']))
 				'stock_master', 'stock_id');
 			update_record_status($_POST['NewStockID'], $_POST['inactive'],
 				'item_codes', 'item_code');
+			if (!get_post('fixed_asset'))
+				update_item_expiry_date($_POST['NewStockID'], get_post('expiry_date'));
 			set_focus('stock_id');
 			$Ajax->activate('stock_id'); // in case of status change
 			display_notification(_("Item has been updated."));
@@ -295,8 +298,11 @@ if (isset($_POST['addupdate']))
 				get_post('depreciation_method'), input_num('depreciation_rate'), input_num('depreciation_factor'), get_post('depreciation_start', null),
 				get_post('fa_class_id'));
 
+			if (!get_post('fixed_asset') && get_post('expiry_date') !== '')
+				update_item_expiry_date($_POST['NewStockID'], get_post('expiry_date'));
+
 			display_notification(_("A new item has been added."));
-			$_POST['stock_id'] = $_POST['NewStockID'] = 
+			$_POST['stock_id'] = $_POST['NewStockID'] =
 			$_POST['description'] = $_POST['long_description'] = '';
 			$_POST['no_sale'] = $_POST['editable'] = $_POST['no_purchase'] =0;
 			set_focus('NewStockID');
@@ -518,6 +524,16 @@ function item_settings(&$stock_id, $new_item)
 	file_row(_("Image File (.jpg)") . ":", 'pic', 'pic'); // fixme: png/gif
 
 	show_image(@$_POST['NewStockID']);
+
+	if (!get_post('fixed_asset'))
+	{
+		// 0_stock_master.expiry_date - see the comment on
+		// update_item_expiry_date() in items_db.inc for why this is free
+		// text rather than a validated date field.
+		if (!isset($_POST['expiry_date']))
+			$_POST['expiry_date'] = '';
+		text_row(_("Batch/Expiry Date:"), 'expiry_date', null, 20, 20, null, "", "");
+	}
 
 	record_status_list_row(_("Item status:"), 'inactive');
 	if (get_post('fixed_asset')) {

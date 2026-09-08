@@ -92,6 +92,29 @@ function add_item($stock_id, $description, $long_description, $category_id,
 	add_item_code($stock_id, $stock_id, $description, $category_id, 1, 0);
 }
 
+/*
+	Writes the pre-existing 0_stock_master.expiry_date column, kept as a
+	small dedicated write (not folded into update_item()/add_item()'s already
+	long parameter lists, which have many other callers) purely because this
+	column already existed with real per-item data across every row of this
+	install's imported stock_master (a batch/shelf-life expiry field, useful
+	for a perishable dairy-fat product) but had no UI anywhere to view or
+	edit it - get_item() already SELECTs it (SELECT item.*), so no read-side
+	change was needed. Deliberately stored/edited as free text rather than a
+	parsed date: the existing imported values use inconsistent formats
+	(some plain YYYY-MM-DD, others with day/year digits transposed), so
+	strict date validation here would silently reject a lot of the real
+	existing data rather than let it be corrected through the UI that now
+	exists for it.
+*/
+function update_item_expiry_date($stock_id, $expiry_date)
+{
+	$sql = "UPDATE ".TB_PREF."stock_master SET expiry_date=".db_escape($expiry_date)."
+		WHERE stock_id=".db_escape($stock_id);
+
+	db_query($sql, "the item expiry date could not be updated");
+}
+
 function delete_item($stock_id)
 {
 
