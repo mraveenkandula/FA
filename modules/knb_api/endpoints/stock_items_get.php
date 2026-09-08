@@ -9,9 +9,23 @@
 	mobile client see item names/prices/stock levels before calling
 	sales_order_get.php or (once built) a sales-order-creation endpoint.
 
-	customer_id is required: item prices depend on the customer's assigned
-	sales_type (price list) and currency (core FA's price-list mechanism -
-	see get_price() in sales/includes/sales_db.inc), exactly as
+	customer_id is now OPTIONAL (was required until the stock-item-name
+	autocomplete added to StockVerificationScreen - see that screen's
+	count-entry "Stock ID" field, wired through OrdersRepository.
+	getStockItems()). A physical stock count is per-location, not
+	per-customer, so that screen has no customer_id to pass; forcing one
+	would mean fabricating a customer purely to satisfy this endpoint. When
+	customer_id is omitted, price/currency/sales_type_id come back null
+	(there is genuinely no price list to resolve against with no customer -
+	see the next paragraph) and the search/stock_id/description/
+	qty_on_hand behaviour is exactly the same either way. Every existing
+	caller that DOES pass customer_id (order-taking) gets byte-for-byte
+	identical behaviour to before this change - this only adds a new
+	no-customer path, it doesn't alter the customer_id-present one.
+
+	When customer_id IS given: item prices depend on the customer's
+	assigned sales_type (price list) and currency (core FA's price-list
+	mechanism - see get_price() in sales/includes/sales_db.inc), exactly as
 	sales_order_entry.php's add_to_order()/get_customer_details_to_order()
 	resolve prices once a customer is selected. There is no
 	customer-independent "the" price for an item.
@@ -48,15 +62,18 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET')
 	api_error('GET required', 405);
 
 $customer_id = trim((string)@$_GET['customer_id']);
-if ($customer_id === '' || !is_numeric($customer_id))
-	api_error('customer_id is required');
+$customer = null;
+if ($customer_id !== '')
+{
+	if (!is_numeric($customer_id))
+		api_error('customer_id must be numeric');
+	$customer = get_customer($customer_id);
+	if (!$customer)
+		api_error('Customer not found', 404);
+}
 
-$customer = get_customer($customer_id);
-if (!$customer)
-	api_error('Customer not found', 404);
-
-$currency = $customer['curr_code'];
-$sales_type_id = $customer['sales_type'];
+$currency = $customer ? $customer['curr_code'] : null;
+$sales_type_id = $customer ? $customer['sales_type'] : null;
 
 $location = trim((string)@$_GET['location']);
 $search = trim((string)@$_GET['search']);
@@ -87,9 +104,24 @@ while ($row = db_fetch_assoc($result))
 	// no rate matched). Reuses api_date_to_display() (api_bootstrap.inc),
 	// the same ISO->display conversion already relied on for
 	// add_leave_entry(), rather than a second one-off conversion.
-	$row['price'] = get_price($row['stock_id'], $currency, $sales_type_id, null, api_date_to_display(date('Y-m-d')));
-	$row['currency'] = $currency;
-	$row['sales_type_id'] = $sales_type_id;
+	//
+	// No customer_id (see doc comment above) means no price list to
+	// resolve against - get_price() itself has no "no customer" mode, so
+	// this skips it entirely rather than calling it with a fabricated
+	// sales_type_id/currency. qty_on_hand has no customer dependency
+	// either way (get_qoh_on_date() only ever took a location).
+	if ($customer)
+	{
+		$row['price'] = get_price($row['stock_id'], $currency, $sales_type_id, null, api_date_to_display(date('Y-m-d')));
+		$row['currency'] = $currency;
+		$row['sales_type_id'] = $sales_type_id;
+	}
+	else
+	{
+		$row['price'] = null;
+		$row['currency'] = null;
+		$row['sales_type_id'] = null;
+	}
 	$row['qty_on_hand'] = get_qoh_on_date($row['stock_id'], $location !== '' ? $location : null);
 	$items[] = $row;
 }
