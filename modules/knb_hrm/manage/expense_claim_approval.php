@@ -25,9 +25,14 @@ if ($reject_id != -1 && check_csrf_token())
 start_form();
 
 display_heading(_("Pending Claims"));
+// No claim_type filter here on purpose - this queue mixes regular Expense
+// Claims and TA/DA claims (see expense_claim_db.inc's claim_type doc
+// comment / tada_claim_post.php), same table, same approval workflow. The
+// added Type column below is the only change from before that column
+// existed, so an approver can tell them apart.
 $result = get_expense_claims('Pending');
 start_table(TABLESTYLE, "width='90%'");
-$th = array(_('Date'), _('Employee'), _('Category'), _('Amount'), _('Description'), '');
+$th = array(_('Date'), _('Employee'), _('Type'), _('Category'), _('Amount'), _('Description'), '');
 table_header($th);
 $k = 0;
 while ($row = db_fetch($result))
@@ -36,6 +41,7 @@ while ($row = db_fetch($result))
 	alt_table_row_color($k);
 	label_cell(sql2date($row['claim_date']));
 	label_cell(htmlspecialchars(trim($row['first_name'].' '.$row['last_name']), ENT_QUOTES, 'UTF-8'));
+	label_cell(htmlspecialchars(@$row['claim_type'] ?: 'Expense', ENT_QUOTES, 'UTF-8'));
 	label_cell(htmlspecialchars($row['category'], ENT_QUOTES, 'UTF-8'));
 	amount_cell($row['amount']);
 	label_cell(htmlspecialchars($row['description'], ENT_QUOTES, 'UTF-8'));
