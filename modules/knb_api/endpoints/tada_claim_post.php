@@ -1,18 +1,22 @@
 <?php
 /*
-	POST /modules/knb_api/endpoints/expense_claim_post.php
+	POST /modules/knb_api/endpoints/tada_claim_post.php
 	Authorization: Bearer <token>
-	{ "claim_date": "YYYY-MM-DD", "category": "Travel", "amount": 250.00, "description": "..." }
+	{ "claim_date": "YYYY-MM-DD", "category": "TA", "amount": 450.00,
+	  "description": "Route/reason, e.g. Adoni <-> Kurnool beat visit" }
 	-> { "saved": true }
 
-	Wraps add_expense_claim() from modules/knb_hrm/manage/expense_claim_db.inc,
-	always for the authenticated employee. New claims are always inserted
-	with status 'Pending' by the underlying function itself, same as the
-	web form (expense_claim_entry.php) - approval happens separately via
-	expense_claim_approval.php, unchanged by this endpoint.
+	TA/DA MANUAL claim entry - see tada_claim_get.php's header for the full
+	"why this reuses hr_expense_claims instead of a new table" reasoning and
+	the "why no automated formula" deferral note (same accountant-sign-off
+	caution as Payroll processing in techcloud-parity-gap-analysis.md).
 
-	claim_type is hardcoded to 'Expense' (add_expense_claim()'s 6th arg, added
-	for TA/DA - see that function's doc comment / tada_claim_post.php).
+	Wraps add_expense_claim() with claim_type='TADA', always for the
+	authenticated employee. Always lands as 'Pending' (same as Expense
+	Claims) - approval happens via the existing office-side
+	expense_claim_approval.php screen, which now also shows a Type column
+	(see that file) so an approver can tell TA/DA and Expense claims apart in
+	the same pending-claims queue.
 */
 require_once(__DIR__ . '/../includes/api_bootstrap.inc');
 $employee = api_require_auth();
@@ -29,7 +33,7 @@ elseif (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $claim_date))
 	api_error('claim_date must be in YYYY-MM-DD format');
 
 $category = trim((string)@$input['category']);
-$allowed_categories = array('Travel', 'Fuel', 'Food', 'Accommodation', 'Other');
+$allowed_categories = array('TA', 'DA');
 if ($category !== '' && !in_array($category, $allowed_categories, true))
 	api_error('category must be one of: '.implode(', ', $allowed_categories));
 
@@ -39,6 +43,6 @@ $amount = (float)$input['amount'];
 
 $description = @$input['description'];
 
-add_expense_claim($employee['id'], $claim_date, $category !== '' ? $category : null, $amount, $description, 'Expense');
+add_expense_claim($employee['id'], $claim_date, $category !== '' ? $category : null, $amount, $description, 'TADA');
 
 api_json(array('saved' => true), 201);
