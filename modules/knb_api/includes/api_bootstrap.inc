@@ -59,6 +59,13 @@ if (!$db)
 	exit;
 }
 db_query("SET sql_mode = ''");
+// This mobile API connection is separate from set_global_connection()'s
+// (see includes/db/connect_db_mysqli.inc, which the web UI's session goes
+// through) - so that file's own SET time_zone fix doesn't cover this
+// connection. Same reasoning: force IST via a fixed offset rather than the
+// DB server's @@global.time_zone (SYSTEM by default) or a named zone
+// (requires mysql.time_zone tables to be loaded, not guaranteed present).
+db_query("SET time_zone = '+05:30'");
 
 include_once($path_to_root . '/includes/prefs/sysprefs.inc');
 $SysPrefs = new sys_prefs();

@@ -40,6 +40,14 @@ function set_global_connection($company=-1)
 	///// We are, however, investigating the existing code to be compatible in the future.
 	db_query("SET sql_mode = '".SQL_MODE."'");
 	/////
+	// All installs of this fork are for an India-based business - force every
+	// session's NOW()/CURRENT_TIMESTAMP to IST regardless of the DB server's
+	// own @@global.time_zone (which defaults to SYSTEM, i.e. whatever the host
+	// OS clock is set to - not reliably IST). Named-zone strings like
+	// 'Asia/Kolkata' require the mysql.time_zone tables to be populated,
+	// which isn't guaranteed on a fresh box; the fixed UTC offset '+05:30'
+	// has no such dependency and IST has no DST to account for.
+	db_query("SET time_zone = '+05:30'");
 	$SysPrefs->refresh();
 	return $db;
 }
