@@ -26,6 +26,7 @@ class hooks_knb_hrm extends hooks
 			'knb_hrm_letters.sql' => array('knb_letter_templates', 'id', 'ANY'),
 			'knb_hrm_tasks.sql' => array('knb_employee_tasks', 'id', 'ANY'),
 			'knb_hrm_holidays_shifts_assets.sql' => array('knb_shift_types', 'id', 'ANY'),
+			'knb_hrm_mobile_credentials.sql' => array('hr_employees', 'mobile_username', 'ANY'),
 		);
 		return $this->update_databases(-1, $updates, $check_only);
 	}
@@ -55,6 +56,12 @@ class hooks_knb_hrm extends hooks
 		// action, unlike updating the status of a task already assigned to
 		// you - that stays SA_OPEN, matching how leave/expense entry work.
 		$security_areas['SA_KNB_TASK_ASSIGN'] = array(1<<8|5, _("Assign tasks to employees"));
+		// Setting an employee's mobile app login is a credential-issuance
+		// action, not a data-entry one - closer in kind to
+		// SA_KNB_LETTER_MANAGE than to the plain SA_OPEN maintenance
+		// pages in this module, so it gets its own dedicated area rather
+		// than reusing SA_OPEN or SA_KNB_PAYROLL_MANAGE.
+		$security_areas['SA_KNB_MOBILE_CREDENTIALS'] = array(1<<8|7, _("Set or reset employee mobile app login credentials"));
 		$security_sections = array(1<<8 => _("KNB Group HRM"));
 		return array($security_areas, $security_sections);
 	}
@@ -107,6 +114,8 @@ class knb_hrm_app extends application
 			"modules/knb_hrm/manage/designation.php", 'SA_OPEN', MENU_MAINTENANCE);
 		$this->add_lapp_function(2, _("&Employees"),
 			"modules/knb_hrm/manage/employee.php", 'SA_OPEN', MENU_MAINTENANCE);
+		$this->add_lapp_function(2, _("&Mobile App Credentials"),
+			"modules/knb_hrm/manage/mobile_credentials.php", 'SA_KNB_MOBILE_CREDENTIALS', MENU_MAINTENANCE);
 		$this->add_lapp_function(2, _("Lea&ve Types"),
 			"modules/knb_hrm/manage/leave_types.php", 'SA_OPEN', MENU_MAINTENANCE);
 		$this->add_lapp_function(2, _("Letter &Templates"),
