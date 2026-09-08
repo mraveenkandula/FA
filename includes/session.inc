@@ -267,16 +267,6 @@ function check_page_security($page_security)
 
 	if (!$_SESSION["wa_current_user"]->can_access_page($page_security))
 	{
-		if ($page_security === 'SA_KNB_MOBILE_CREDENTIALS') {
-			global $security_areas;
-			echo "<pre style='background:#eee;padding:10px;'>TEMP DEBUG - remove after use\n";
-			echo "page_security=".htmlspecialchars($page_security)."\n";
-			echo "security_areas entry: ".var_export(@$security_areas[$page_security], true)."\n";
-			echo "role_set: ".var_export($_SESSION['wa_current_user']->role_set, true)."\n";
-			echo "access (role_id): ".var_export($_SESSION['wa_current_user']->access, true)."\n";
-			echo "</pre>";
-		}
-
 		echo "<center><br><br><br><b>";
 		echo _("The security settings on your account do not permit you to access this function");
 		echo "</b>";
