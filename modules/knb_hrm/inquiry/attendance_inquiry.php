@@ -24,8 +24,33 @@ end_form();
 
 $result = get_attendance_report(date2sql($_POST['date_from']), date2sql($_POST['date_to']));
 
-start_table(TABLESTYLE, "width='70%'");
-$th = array(_('Date'), _('Code'), _('Employee'), _('Status'), _('Check In'), _('Check Out'), _('Remarks'));
+/*
+	Selfie thumbnails - the same punch-in/punch-out photo the employee sees
+	in the mobile app's own attendance history (attendance_selfie_post.php /
+	get_attendance_selfies(), see modules/knb_api/includes/
+	attendance_selfie_db.inc), surfaced here so HR/admin reviewing this
+	report can see it too without needing separate access to the mobile
+	app or its API. $row['selfie_in_path']/['selfie_out_path'] are root-
+	relative (e.g. "company/0/images/attendance_selfies/xxx.jpg", per
+	api_upload.inc's doc comment on that shape) - prefixed with
+	$path_to_root here since this page lives three directories down from
+	the FA root (modules/knb_hrm/inquiry/).
+*/
+function selfie_thumb_cell($path)
+{
+	global $path_to_root;
+
+	if (!$path)
+	{
+		label_cell('&nbsp;');
+		return;
+	}
+	$src = htmlspecialchars($path_to_root.'/'.$path, ENT_QUOTES, 'UTF-8');
+	label_cell("<a href='$src' target='_blank'><img src='$src' height='40' border='0' alt='selfie'></a>");
+}
+
+start_table(TABLESTYLE, "width='80%'");
+$th = array(_('Date'), _('Code'), _('Employee'), _('Status'), _('Check In'), _('Selfie In'), _('Check Out'), _('Selfie Out'), _('Remarks'));
 table_header($th);
 $k = 0;
 
@@ -37,7 +62,9 @@ while ($row = db_fetch($result))
 	label_cell(htmlspecialchars(trim($row['first_name'].' '.$row['last_name']), ENT_QUOTES, 'UTF-8'));
 	label_cell(htmlspecialchars($row['status'], ENT_QUOTES, 'UTF-8'));
 	label_cell(htmlspecialchars($row['check_in'], ENT_QUOTES, 'UTF-8'));
+	selfie_thumb_cell($row['selfie_in_path']);
 	label_cell(htmlspecialchars($row['check_out'], ENT_QUOTES, 'UTF-8'));
+	selfie_thumb_cell($row['selfie_out_path']);
 	label_cell(htmlspecialchars($row['remarks'], ENT_QUOTES, 'UTF-8'));
 	end_row();
 }
