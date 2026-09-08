@@ -75,3 +75,28 @@ CREATE TABLE IF NOT EXISTS `0_knb_competitor_notes` (
   KEY `employee_id` (`employee_id`),
   KEY `debtor_no` (`debtor_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- Lead follow-up pipeline (modules/knb_api/includes/lead_db.inc). Also
+-- created defensively at runtime (ensure_lead_tables(), same reason as
+-- every other table in this file - see this file's header comment); listed
+-- here for reference only, this .sql is never auto-applied.
+CREATE TABLE IF NOT EXISTS `0_knb_lead_followups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `debtor_no` int(11) NOT NULL,
+  `employee_id` int(11) DEFAULT NULL,
+  `status` varchar(20) NOT NULL DEFAULT 'New' COMMENT 'New, Contacted, Converted, Lost',
+  `follow_up_date` date DEFAULT NULL,
+  `notes` varchar(500) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `debtor_no` (`debtor_no`),
+  KEY `employee_id` (`employee_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `0_knb_lead_status` (
+  `debtor_no` int(11) NOT NULL,
+  `status` varchar(20) NOT NULL DEFAULT 'New',
+  `last_follow_up_date` date DEFAULT NULL,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`debtor_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;

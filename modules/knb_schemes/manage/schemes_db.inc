@@ -128,8 +128,14 @@ function get_distinct_states()
 	scheme's person type (and matching state/territory, if set) within the
 	scheme's active date range - real ST_SALESINVOICE lines only, so a
 	scheme's slabs can be checked against what customers actually bought.
+
+	$debtor_no optionally narrows this to a single customer (added for
+	modules/knb_api/endpoints/scheme_eligibility_get.php's per-outlet
+	eligibility check, which reuses this exact query rather than
+	re-deriving it) - omitted/null preserves the original all-customers
+	behaviour this inquiry page (schemes_eligibility_inquiry.php) relies on.
 */
-function get_scheme_achievement($scheme)
+function get_scheme_achievement($scheme, $debtor_no = null)
 {
 	$sql = "SELECT cd.debtor_no, d.name AS customer_name, SUM(dtd.quantity) AS total_qty
 		FROM ".TB_PREF."debtor_trans_details dtd
@@ -149,6 +155,8 @@ function get_scheme_achievement($scheme)
 		$sql .= " AND cd.territory_id=".db_escape($scheme['territory_id']);
 	if ($scheme['state'])
 		$sql .= " AND tn.state=".db_escape($scheme['state']);
+	if ($debtor_no)
+		$sql .= " AND cd.debtor_no=".db_escape($debtor_no);
 
 	$sql .= " GROUP BY cd.debtor_no, d.name ORDER BY total_qty DESC";
 	return db_query($sql, "could not get scheme achievement");
@@ -160,8 +168,11 @@ function get_scheme_achievement($scheme)
 	the threshold is a single invoice's total, not qty summed across the
 	whole period, since "spend X get Y" promotions are evaluated bill by
 	bill, not on cumulative purchases like a quantity slab scheme is.
+
+	$debtor_no optionally narrows this to a single customer - same reason
+	and same default-preserving contract as get_scheme_achievement() above.
 */
-function get_scheme_bill_value_achievement($scheme)
+function get_scheme_bill_value_achievement($scheme, $debtor_no = null)
 {
 	$sql = "SELECT dt.trans_no, cd.debtor_no, d.name AS customer_name,
 		(dt.ov_amount+dt.ov_gst+dt.ov_freight+dt.ov_freight_tax) AS bill_value
@@ -179,7 +190,32 @@ function get_scheme_bill_value_achievement($scheme)
 		$sql .= " AND cd.territory_id=".db_escape($scheme['territory_id']);
 	if ($scheme['state'])
 		$sql .= " AND tn.state=".db_escape($scheme['state']);
+	if ($debtor_no)
+		$sql .= " AND cd.debtor_no=".db_escape($debtor_no);
 
 	$sql .= " ORDER BY bill_value DESC";
 	return db_query($sql, "could not get scheme bill value achievement");
+}
+
+/*
+	Active schemes (not inactive, today within start_date/end_date) whose
+	scope matches this customer's person_type/territory/state - a NULL
+	scheme.person_type/territory_id/state means "applies to all", the same
+	falsy-check convention get_scheme_achievement() above already uses.
+	Built for modules/knb_api/endpoints/scheme_eligibility_get.php; not used
+	by any existing web page (those list/filter schemes directly, not "for
+	a given customer").
+*/
+function get_active_schemes_for_customer($person_type, $territory_id, $state)
+{
+	$sql = "SELECT s.*, b.name AS brand_name
+		FROM ".TB_PREF."knb_schemes s
+		LEFT JOIN ".TB_PREF."item_brands b ON b.id = s.brand_id
+		WHERE !s.inactive
+		AND CURDATE() BETWEEN s.start_date AND s.end_date
+		AND (s.person_type IS NULL OR s.person_type=".db_escape($person_type ?: '').")
+		AND (s.territory_id IS NULL OR s.territory_id=".db_escape($territory_id ?: 0).")
+		AND (s.state IS NULL OR s.state=".db_escape($state ?: '').")
+		ORDER BY s.start_date DESC";
+	return db_query($sql, "could not get active schemes for customer");
 }
