@@ -267,6 +267,32 @@ function apply_price_import($rows, $curr_abrev, $source_file)
 	$user_id = @$_SESSION['wa_current_user']->user;
 	$user_name = @$_SESSION['wa_current_user']->username;
 
+	// The knb_price_import.sql migration that creates this table is never
+	// actually run automatically for hand-placed (non-repo) modules like
+	// this one - install_extension() is only invoked by FA's own package
+	// installer (admin/inst_module.php), which our knb_* modules were
+	// never registered with. Every other knb_* migration on this install
+	// only ever applied because whoever built that feature ran it by hand
+	// against production - do that here instead, defensively, the same
+	// way core FA's own force_open() self-heals a missing directory.
+	db_query("CREATE TABLE IF NOT EXISTS ".TB_PREF."knb_price_import_log (
+		id int(11) NOT NULL AUTO_INCREMENT,
+		import_batch varchar(20) NOT NULL,
+		source_file varchar(255) DEFAULT NULL,
+		stock_id varchar(20) NOT NULL,
+		sales_type_id int(11) NOT NULL,
+		curr_abrev char(3) NOT NULL DEFAULT '',
+		old_price double DEFAULT NULL,
+		new_price double NOT NULL,
+		action varchar(10) NOT NULL,
+		imported_by int(11) DEFAULT NULL,
+		imported_by_name varchar(60) DEFAULT NULL,
+		imported_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		PRIMARY KEY (id),
+		KEY import_batch (import_batch)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci",
+		"could not create knb_price_import_log table");
+
 	begin_transaction();
 
 	foreach ($rows as $row)
